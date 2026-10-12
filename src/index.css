@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-deep: #050507;
+    --bg-graphite: #101115;
+    --surface-tech: #20232B;
+    --text-pure: #FFFFFF;
+    --text-muted: #C8CAD1;
+    --accent-electric: #3678FF;
+    --accent-violet: #7655FF;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background-color: #050507;
+    color: #FFFFFF;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Outfit', 'Space Grotesk', system-ui, sans-serif;
+    letter-spacing: -0.03em;
+  }
+
+  .font-mono-tech {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Custom subtle dark scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050507;
+}
+::-webkit-scrollbar-thumb {
+  background: #20232B;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3678FF;
+}
+
+/* Luxury dark glassmorphism */
+.glass-panel {
+  background: rgba(16, 17, 21, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-subtle {
+  background: rgba(16, 17, 21, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glow-blue {
+  box-shadow: 0 0 50px -10px rgba(54, 120, 255, 0.18);
+}
+
+.glow-violet {
+  box-shadow: 0 0 50px -10px rgba(118, 85, 255, 0.18);
+}
+
+/* Light sweep reflection across hero console */
+@keyframes lightSweep {
+  0% {
+    transform: translateX(-180%) skewX(-25deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.55;
+  }
+  45% {
+    transform: translateX(200%) skewX(-25deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(200%) skewX(-25deg);
+    opacity: 0;
+  }
+}
+
+.animate-light-sweep {
+  animation: lightSweep 8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+/* Floating effect */
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float-gentle {
+  animation: floatGentle 5.5s ease-in-out infinite;
+}
+
