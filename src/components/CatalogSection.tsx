@@ -165,7 +165,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
                         {product.shortDescription}
                       </p>
 
-                      <p className="mt-3 text-[11px] text-[#AFC0DC]">Imagen ilustrativa. Pedí fotos reales, accesorios, estado de batería y garantía aplicable a la unidad.</p>
+                      {!product.realPhotos?.length && <p className="mt-3 text-[11px] text-[#AFC0DC]">Imagen ilustrativa. Pedí fotos reales, accesorios, estado de batería y garantía aplicable a la unidad.</p>}
                       {/* Storage Variants selector (Clickable buttons) */}
                       {product.variants.length > 1 && (
                         <div className="mt-4 pt-4 border-t border-white/[0.06]">
