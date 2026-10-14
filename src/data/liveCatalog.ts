@@ -28,6 +28,9 @@ export async function fetchCatalogFromSheet(): Promise<SheetStockState> {
     if (!Number.isFinite(current.priceARS) || current.priceARS <= 0) return [];
     return [{
       ...product,
+      model: current.model,
+      subtitle: current.model,
+      shortDescription: current.model + '. Equipo usado; confirmá estado y accesorios antes de comprar.',
       realPhotos: photos[rowNumber] ?? [],
       variants: product.variants.map(v => ({ ...v, priceARSApprox: current.priceARS, inStock: true })),
       badge: 'En stock'
