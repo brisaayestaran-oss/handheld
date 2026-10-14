@@ -1,102 +1,51 @@
 import React from 'react';
-import { brandConfig } from '../config/brand';
-import { Instagram, Video, MessageCircle, ArrowUpRight } from 'lucide-react';
+import { Instagram, MessageCircle, ArrowUpRight, ShoppingBag, Users, Facebook, ShieldCheck } from 'lucide-react';
+import { brandConfig, buildGeneralWhatsAppLink } from '../config/brand';
+import { recordInterest } from '../services/interestAnalytics';
 
-export const SocialSection: React.FC = () => {
-  const socialCards = [
-    {
-      platform: 'Instagram',
-      handle: brandConfig.instagramHandle,
-      url: brandConfig.instagramUrl,
-      icon: Instagram,
-      accentColor: '#E1306C',
-      tag: 'NOVEDADES & SETUPS',
-      title: 'Instagram',
-      description: 'Historias diarias de consolas disponibles, accesorios compatibles, fotos de setups portátiles y unboxings en detalle.'
-    },
-    {
-      platform: 'TikTok',
-      handle: brandConfig.tiktokHandle,
-      url: brandConfig.tiktokUrl,
-      icon: Video,
-      accentColor: '#00F2FE',
-      tag: 'BENCHMARKS & COMPARATIVAS',
-      title: 'Pruebas de Rendimiento en Juego Real',
-      description: 'Gameplays con contador de FPS en vivo en títulos exigentes: Cyberpunk 2077, Black Myth Wukong, Forza Horizon 5 y emuladores.'
-    },
-    {
-      platform: 'WhatsApp',
-      handle: brandConfig.whatsappDisplay,
-      url: `https://wa.me/${brandConfig.whatsappNumber}`,
-      icon: MessageCircle,
-      accentColor: '#25D366',
-      tag: 'CANAL DE ATENCIÓN DIRECTA',
-      title: 'Canal oficial de WhatsApp',
-      description: 'Consultá cotización diaria, reservá consolas bajo pedido y recibí soporte técnico mano a mano con especialistas.'
-    }
-  ];
+export const SocialSection: React.FC = () => (
+  <section id="redes" className="relative bg-transparent px-5 py-14 sm:px-8 sm:py-24">
+    <div className="relative mx-auto max-w-6xl">
+      <p className="text-xs font-bold uppercase tracking-[.22em] text-[#8FA9FF]">VOS ELEGÍS CÓMO COMPRAR</p>
+      <h2 className="mt-3 text-3xl font-black uppercase text-white sm:text-5xl">TU CONSOLA, A TU MANERA.</h2>
+      <p className="mt-3 max-w-2xl text-sm text-[#C8CAD1]">Elegí el canal de compra que te resulte más cómodo y compará sus condiciones.</p>
 
-  return (
-    <section id="redes" className="relative py-28 bg-[#050507] border-t border-white/[0.05]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-mono-tech text-[#7655FF] uppercase tracking-widest block mb-3">
-            05. CANALES OFICIALES
-          </span>
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black font-display text-white tracking-tight leading-tight uppercase">
-            COMUNIDAD & REDES
-          </h2>
-          <p className="mt-5 text-base sm:text-lg text-[#C8CAD1] leading-relaxed">
-            Sumate a nuestros canales para ver análisis de rendimiento, comparativas y enterarte de los nuevos ingresos de stock.
-          </p>
-        </div>
+      <div className="mt-8 grid gap-4 lg:grid-cols-2">
+        <a href={buildGeneralWhatsAppLink('Quiero comprar directo y consultar precio final y envío')}
+          onClick={() => recordInterest('purchase_click', undefined, 'whatsapp')}
+          target="_blank" rel="noopener noreferrer"
+          className="group flex flex-col justify-between rounded-3xl border border-[#558BFF]/35 bg-[#14234A]/65 p-6 transition-colors hover:border-[#83A8FF] hover:bg-[#19305E]/70 sm:p-8">
+          <div>
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#3678FF]/20 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#A8C5FF]">PRECIO DIRECTO</div>
+            <MessageCircle size={32} className="mb-4 text-[#87AEFF]" />
+            <h3 className="text-2xl font-black text-white sm:text-3xl">Comprá directo a HANDHELD</h3>
+            <p className="mt-3 text-sm leading-relaxed text-[#CEDAF0]">Consultá el precio publicado en nuestra web. El envío se cotiza por separado según tu localidad.</p>
+          </div>
+          <span className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#3678FF] px-5 text-sm font-bold text-white">CONSULTAR POR WHATSAPP <ArrowUpRight size={18}/></span>
+        </a>
 
-        {/* Social Channel Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {socialCards.map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <a
-                key={idx}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group p-8 rounded-3xl bg-[#101115] border border-white/[0.08] hover:border-white/[0.22] transition-all flex flex-col justify-between hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-8">
-                    <div
-                      className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center transition-all group-hover:scale-110"
-                      style={{ color: item.accentColor }}
-                    >
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <div className="flex items-center gap-1.5 text-xs font-mono-tech text-white/50 group-hover:text-white transition-colors">
-                      <span>{item.platform}</span>
-                      <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </div>
-                  </div>
-
-                  <span className="text-[10px] font-mono-tech tracking-wider uppercase text-[#7655FF] font-semibold block mb-2">
-                    {item.tag}
-                  </span>
-                  <h3 className="text-xl font-bold font-display text-white mb-3 group-hover:text-[#3678FF] transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-[#C8CAD1]/80 leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-
-                <div className="mt-8 pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono-tech text-white/70">
-                  <span className="text-white/40">CANAL</span>
-                  <span className="text-white font-semibold">{item.handle}</span>
-                </div>
-              </a>
-            );
-          })}
+        <div className="relative flex flex-col justify-between rounded-3xl border border-[#FFE071]/60 bg-[linear-gradient(140deg,rgba(255,225,102,.16),rgba(20,24,37,.94)_58%)] p-6 shadow-[0_16px_60px_rgba(0,0,0,.18)] sm:p-8">
+          <div>
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#FFE600] px-3 py-1.5 text-[11px] font-black uppercase tracking-wide text-[#222]">TAMBIÉN EN MERCADO LIBRE</div>
+            <ShoppingBag size={36} className="mb-4 text-[#FFE87A]" />
+            <h3 className="text-2xl font-black text-white sm:text-3xl">Comprá por Mercado Libre</h3>
+            <p className="mt-3 text-sm leading-relaxed text-[#E1E4EF]">¿Preferís usar la plataforma? Pedinos el enlace de la publicación y compará las condiciones antes de comprar.</p>
+            <p className="mt-3 flex items-start gap-2 text-xs leading-relaxed text-[#E4DCAA]"><ShieldCheck size={17} className="shrink-0"/> El precio en Mercado Libre puede ser diferente por los costos de la plataforma. Consultá el valor exacto en cada publicación.</p>
+          </div>
+          <a href={buildGeneralWhatsAppLink('Quiero el enlace y precio de la publicación de Mercado Libre')}
+            onClick={() => recordInterest('purchase_click', undefined, 'mercadolibre')}
+            target="_blank" rel="noopener noreferrer"
+            className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#FFE600] px-5 text-sm font-black text-[#1C1C1C] transition-colors hover:bg-[#FFF185]">
+            PEDIR LINK DE MERCADO LIBRE <ArrowUpRight size={18}/>
+          </a>
         </div>
       </div>
-    </section>
-  );
-};
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <a href={brandConfig.instagramUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-16 items-center gap-3 rounded-xl bg-white/[.045] px-5 text-sm font-semibold text-white hover:bg-white/[.09]"><Instagram size={21}/> Instagram <ArrowUpRight size={15} className="ml-auto"/></a>
+        <a href={buildGeneralWhatsAppLink('Quiero sumarme a la comunidad de Instagram')} target="_blank" rel="noopener noreferrer" className="flex min-h-16 items-center gap-3 rounded-xl bg-white/[.045] px-5 text-sm font-semibold text-white hover:bg-white/[.09]"><Users size={21}/> Comunidad <ArrowUpRight size={15} className="ml-auto"/></a>
+        <a href={brandConfig.facebookUrl} target="_blank" rel="noopener noreferrer" className="flex min-h-16 items-center gap-3 rounded-xl bg-white/[.045] px-5 text-sm font-semibold text-white hover:bg-white/[.09]"><Facebook size={21}/> Facebook <ArrowUpRight size={15} className="ml-auto"/></a>
+      </div>
+    </div>
+  </section>
+);

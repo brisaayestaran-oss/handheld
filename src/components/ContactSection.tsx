@@ -8,34 +8,52 @@ export const ContactSection: React.FC = () => {
   const faqs = [
     {
       q: '¿Cómo se coordina la compra y la entrega?',
-      a: 'La atención es 100% personalizada por WhatsApp. Te compartimos fotos reales de la unidad disponible, número de serie, coordinamos el medio de pago acordado y enviamos el código de seguimiento de Correo Argentino / Andreani en el día.'
+      a: 'Coordinamos la compra por WhatsApp. Antes de pagar, solicitá fotografías de la unidad, su estado, los medios de pago disponibles y las condiciones de entrega. Los tiempos se confirman al momento de la compra.'
     },
     {
       q: '¿Hacen envíos a todo el país?',
-      a: 'Sí, despachamos con encomienda asegurada a todas las provincias de Argentina. Para compras en CABA y Gran Buenos Aires, se puede coordinar entrega prioritaria por mensajería privada.'
+      a: 'Consultanos tu localidad y código postal por WhatsApp para confirmar cobertura, costo, plazo y condiciones del envío antes de realizar el pago.'
     },
     {
-      q: '¿Qué significa Reacondicionado Certificado?',
-      a: 'Cada consola reacondicionada certificada pasa por un testeo riguroso de más de 30 puntos técnicos (salud de batería, calibración de sticks analógicos, puertos, pantalla y temperaturas). Se entregan en estado impecable, limpias, con cargador original y estuche de transporte.'
+      q: '¿Qué significa caja abierta y poco uso?',
+      a: 'Son consolas usadas con poco tiempo de uso y embalaje abierto. El estado exacto, batería, accesorios y condiciones de garantía pueden variar entre unidades. Pedinos fotografías e información de la unidad que te interesa.'
     },
     {
       q: '¿Steam Deck o Lenovo Legion Go? ¿Cuál me conviene?',
-      a: 'Si buscás encender y jugar de inmediato tu biblioteca de Steam con excelente ergonomía y máxima duración de batería, Steam Deck OLED es la reina. Si querés jugar títulos de Xbox Game Pass nativo, juegos competitivos con anti-cheat (como Fortnite o CoD) o buscás la pantalla más grande y nítida a 144Hz, Lenovo Legion Go es la indicada. ¡Escribinos por WhatsApp y analizamos tus juegos!'
+      a: 'Steam Deck con SteamOS prioriza una experiencia centrada en Steam y permite comprobar la compatibilidad de los juegos. Legion Go usa Windows y ofrece mayor flexibilidad de lanzadores y pantalla grande. El rendimiento y la compatibilidad varían según título, ajustes y actualizaciones. Consultanos por tus juegos favoritos.'
     }
   ];
 
   return (
-    <section id="contacto" className="relative py-32 bg-[#050507] border-t border-white/[0.05] overflow-hidden">
+    <section id="contacto" className="relative py-24 sm:py-32 bg-transparent overflow-hidden">
       {/* Background glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-96 bg-radial from-[#3678FF]/15 via-[#7655FF]/5 to-transparent blur-[140px] pointer-events-none" />
+      {/* Efecto difuminado compartido con las demas secciones. */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="mb-14">
+          <p className="text-xs font-bold uppercase tracking-[.2em] text-[#8FA9FF]">COMPRÁ CON INFORMACIÓN CLARA</p>
+          <h2 className="mt-3 text-3xl font-black uppercase tracking-tight text-white sm:text-4xl">Conocé tu consola antes de decidir.</h2>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            <div className="rounded-2xl border border-white/10 bg-[#101725] p-6">
+              <h3 className="font-bold text-white">Caja abierta · poco uso</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#B8C7DD]">Son equipos usados con mínimo uso, no nuevos sellados. El estado y los accesorios pueden variar por unidad.</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-[#101725] p-6">
+              <h3 className="font-bold text-white">Fotos y detalles reales</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#B8C7DD]">Las fotografías promocionales ilustran el modelo. Pedí imágenes de la consola concreta, batería, controles y accesorios incluidos.</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-[#101725] p-6">
+              <h3 className="font-bold text-white">Sin sorpresas al comprar</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#B8C7DD]">Confirmamos por WhatsApp precio final, disponibilidad, medios de pago, garantía aplicable, envío y entrega antes de cerrar la operación.</p>
+            </div>
+          </div>
+        </div>
         {/* Giant Closing Banner */}
         <div className="p-8 sm:p-16 rounded-3xl bg-gradient-to-b from-[#101115] to-[#0A0B0E] border border-white/[0.12] text-center relative overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.9)] mb-20">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] mb-6">
             <span className="w-2 h-2 rounded-full bg-[#3678FF]" />
             <span className="text-[11px] font-mono-tech text-[#C8CAD1] uppercase tracking-wider">
-              ATENCIÓN INMEDIATA · BUENOS AIRES & TODO EL PAÍS
+              ATENCIÓN PERSONALIZADA · BUENOS AIRES & TODO EL PAÍS
             </span>
           </div>
 
@@ -71,7 +89,7 @@ export const ContactSection: React.FC = () => {
             <span aria-hidden="true">·</span>
             <div className="flex items-center gap-1.5">
               <Truck className="w-3.5 h-3.5 text-[#7655FF]" />
-              <span>Envíos asegurados a todo el país</span>
+              <span>Consultá cobertura y costos de envío</span>
             </div>
           </div>
         </div>

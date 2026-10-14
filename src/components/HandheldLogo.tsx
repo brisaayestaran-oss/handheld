@@ -30,7 +30,7 @@ export const HandheldLogo: React.FC<Props> = ({
         />
       )}
       <img
-        src="/handheld.png"
+        src="/logos/handheld.png"
         alt="HANDHELD"
         className={`${currentHeight} w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] filter drop-shadow-[0_4px_16px_rgba(54,120,255,0.3)] brightness-105`}
         loading="eager"

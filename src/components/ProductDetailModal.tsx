@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Product } from '../types/catalog';
-import { brandConfig, buildWhatsAppLink } from '../config/brand';
+import { brandConfig, buildWhatsAppLink, buildGeneralWhatsAppLink } from '../config/brand';
+import { recordInterest } from '../services/interestAnalytics';
 import { SteamDeckVisual } from './visuals/SteamDeckVisual';
 import { LegionGoVisual } from './visuals/LegionGoVisual';
 import { X, MessageCircle, Check, ArrowRight, ShieldCheck, Zap, Info } from 'lucide-react';
@@ -59,24 +60,24 @@ export const ProductDetailModal: React.FC<Props> = ({
               <div className="p-8 rounded-2xl bg-[#090A0D] border border-white/[0.06] flex items-center justify-center min-h-[300px] sm:min-h-[380px] relative overflow-hidden group">
                 <img
                   src={
-                    product.brand === 'Lenovo'
+                    product.realPhotos?.[selectedGalleryIdx] || (product.brand === 'Lenovo'
                       ? '/assets/consoles/lenovo-legion-go/legion-go-official-main.png'
-                      : '/assets/consoles/steam-deck/steam-deck-hero.png'
+                      : product.id === 'steam-deck-lcd-refurbished' ? '/Steam%20deck/steamdeck_renderings/rendering07.webp' : '/Steam%20deck/steam_deck_oled/press_front_home.webp')
                   }
-                  alt={`${product.name} Oficial`}
+                  alt={`${product.name} · ${product.realPhotos?.length ? 'foto real de la unidad' : 'imagen ilustrativa'}`}
                   className="w-full max-h-[280px] object-contain drop-shadow-[0_25px_45px_rgba(0,0,0,0.95)] contrast-[1.03] transition-transform duration-300 group-hover:scale-105"
                   referrerPolicy="no-referrer"
                 />
 
                 {/* Subtitle tag */}
                 <div className="absolute bottom-4 left-4 right-4 text-center text-[11px] font-mono-tech text-[#C8CAD1]/50 bg-black/40 backdrop-blur-sm py-1 rounded">
-                  {product.galleryImages[selectedGalleryIdx]?.description || product.subtitle}
+                  {product.realPhotos?.length ? 'Foto real de esta unidad' : 'Imagen ilustrativa del modelo. Solicitá fotografías de la unidad.'}
                 </div>
               </div>
 
               {/* Gallery Thumbnails */}
               <div className="flex items-center gap-2 overflow-x-auto pb-1">
-                {product.galleryImages.map((img, idx) => (
+                {product.realPhotos?.length ? product.realPhotos.map((url,idx)=><button key={url} type="button" onClick={()=>setSelectedGalleryIdx(idx)} className={`shrink-0 rounded-xl border p-1 ${selectedGalleryIdx===idx?'border-[#78A9FF] bg-[#3678FF]/20':'border-white/20'}`}><img src={url} alt={`Foto real ${idx+1}`} className="h-16 w-20 rounded-lg object-cover" /></button>) : product.galleryImages.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedGalleryIdx(idx)}
@@ -109,7 +110,7 @@ export const ProductDetailModal: React.FC<Props> = ({
 
                 {/* Variant Selector */}
                 <div className="mt-6 pt-4 border-t border-white/[0.08]">
-                  <span className="text-xs font-mono-tech text-[#C8CAD1]/70 uppercase tracking-wider block mb-2">
+                  <span className="text-sm font-semibold text-white uppercase tracking-wider block mb-3">
                     Seleccioná Capacidad de Almacenamiento:
                   </span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -117,15 +118,15 @@ export const ProductDetailModal: React.FC<Props> = ({
                       <button
                         key={v.sku}
                         onClick={() => setSelectedVariantIdx(idx)}
-                        className={`p-3 rounded-xl border text-left transition-all ${
+                        className={`min-h-16 p-4 rounded-xl border text-left transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#87AAFF] ${
                           selectedVariantIdx === idx
-                            ? 'bg-white text-black border-white shadow-md'
-                            : 'bg-white/[0.02] border-white/[0.08] text-[#C8CAD1] hover:text-white'
+                            ? 'bg-[#3678FF] text-white border-[#83ABFF] shadow-[0_0_16px_rgba(54,120,255,.3)]'
+                            : 'bg-white/[0.04] border-white/20 text-white hover:border-white/50'
                         }`}
                       >
-                        <div className="text-xs font-bold font-mono-tech">{v.capacity}</div>
+                        <div className="text-sm font-bold">{v.capacity}</div>
                         <div className="text-sm font-black font-display mt-0.5 tabular-nums">
-                          US$ {v.priceUSD}
+                          $ {Number(v.priceARSApprox).toLocaleString('es-AR', { maximumFractionDigits: 0 })}
                         </div>
                       </button>
                     ))}
@@ -135,19 +136,14 @@ export const ProductDetailModal: React.FC<Props> = ({
                 {/* Price Display */}
                 <div className="mt-6 p-4 rounded-2xl bg-[#090A0D] border border-white/[0.06]">
                   <div className="text-[10px] font-mono-tech text-[#C8CAD1]/50 uppercase tracking-wider">
-                    Precio Referencia Catálogo Demo
+                    Precio directo · sin envío · confirmar
                   </div>
-                  <div className="flex items-baseline gap-2 mt-1">
-                    <span className="text-3xl font-black font-display text-white tabular-nums">
-                      US$ {currentVariant.priceUSD}
-                    </span>
-                    <span className="text-xs font-mono-tech text-[#C8CAD1]/50">
-                      (~${(currentVariant.priceARSApprox / 1000).toFixed(0)}k ARS)
-                    </span>
+                  <div className="mt-1 whitespace-nowrap text-[clamp(1.4rem,6vw,1.875rem)] font-black font-display text-white tabular-nums tracking-tight">
+                    $ {Number(currentVariant.priceARSApprox).toLocaleString('es-AR', { maximumFractionDigits: 0 })}
                   </div>
                   <div className="mt-2 flex items-center gap-1.5 text-[11px] font-mono-tech text-[#C8CAD1]/70">
                     <Check className="w-3.5 h-3.5 text-[#3678FF]" />
-                    <span>{product.availability}</span>
+                    <span>Disponibilidad a confirmar</span>
                   </div>
                 </div>
 
@@ -155,6 +151,7 @@ export const ProductDetailModal: React.FC<Props> = ({
                 <div className="mt-6 space-y-3">
                   <a
                     href={whatsappUrl}
+                    onClick={() => recordInterest('purchase_click', { id: currentVariant.sku, name: product.name, capacity: currentVariant.capacity }, 'whatsapp')}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full py-4 px-6 text-xs sm:text-sm font-black font-display uppercase tracking-wider text-white bg-[#3678FF] hover:bg-[#2563EB] rounded-xl transition-all shadow-[0_0_35px_rgba(54,120,255,0.35)] flex items-center justify-center gap-2 active:scale-95"
@@ -163,6 +160,15 @@ export const ProductDetailModal: React.FC<Props> = ({
                     <span>CONSULTAR POR WHATSAPP</span>
                   </a>
 
+                  <div className="rounded-xl bg-white/[0.04] px-4 py-3 text-xs text-[#C8CAD1]">
+                    <p className="font-bold text-white">Elegí cómo comprar</p>
+                    <p className="mt-1">El precio directo publicado no incluye envío. El precio y condiciones de Mercado Libre se confirman en la publicación correspondiente.</p>
+                    <a href={buildGeneralWhatsAppLink('Solicito link y precio de Mercado Libre para ' + product.name + ' ' + currentVariant.capacity)}
+                      onClick={() => recordInterest('purchase_click', { id: currentVariant.sku, name: product.name, capacity: currentVariant.capacity }, 'mercadolibre')}
+                      target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-10 items-center rounded-lg border border-white/20 px-4 font-semibold text-white hover:bg-white/10">
+                      SOLICITAR PUBLICACIÓN EN MERCADO LIBRE
+                    </a>
+                  </div>
                   <div className="text-[11px] font-mono-tech text-center text-[#C8CAD1]/50">
                     Mensaje preconfigurado: "Hola, quiero consultar por la {product.brand} {product.model} {currentVariant.capacity}. ¿Está disponible?"
                   </div>
@@ -173,7 +179,7 @@ export const ProductDetailModal: React.FC<Props> = ({
               <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] text-xs text-[#C8CAD1]/70 flex items-start gap-3">
                 <ShieldCheck className="w-4 h-4 text-[#3678FF] shrink-0 mt-0.5" />
                 <span>
-                  Atención comercial directa. Coordiná envío a domicilio con código de seguimiento en tiempo real.
+                  Equipo de caja abierta y poco uso. Solicitá fotos reales, estado de la unidad, accesorios, garantía aplicable y condiciones de pago y entrega antes de confirmar.
                 </span>
               </div>
             </div>
@@ -263,7 +269,7 @@ export const ProductDetailModal: React.FC<Props> = ({
                     <div>
                       <div className="text-[10px] font-mono-tech text-[#3678FF] uppercase">{rel.brand}</div>
                       <div className="text-sm font-bold text-white font-display">{rel.name}</div>
-                      <div className="text-xs text-[#C8CAD1]/60 mt-0.5">Desde US$ {rel.variants[0]?.priceUSD}</div>
+                      <div className="text-xs text-[#C8CAD1]/60 mt-0.5">Desde $ {Number(rel.variants[0]?.priceARSApprox ?? 0).toLocaleString('es-AR', { maximumFractionDigits: 0 })}</div>
                     </div>
                     <ArrowRight className="w-4 h-4 text-white/40" />
                   </div>

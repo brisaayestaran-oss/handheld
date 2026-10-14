@@ -2,7 +2,7 @@
 
 @layer base {
   :root {
-    --bg-deep: #050507;
+    --bg-deep: #050A15;
     --bg-graphite: #101115;
     --surface-tech: #20232B;
     --text-pure: #FFFFFF;
@@ -13,7 +13,7 @@
   }
 
   body {
-    background-color: #050507;
+    background-color: #050A15;
     color: #FFFFFF;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }

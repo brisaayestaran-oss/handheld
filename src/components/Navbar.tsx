@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { brandConfig, buildGeneralWhatsAppLink } from '../config/brand';
 import { HandheldLogo } from './HandheldLogo';
 import { MessageCircle, Menu, X, ArrowUpRight, Sparkles } from 'lucide-react';
@@ -9,6 +9,8 @@ interface Props {
 }
 
 export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
+  const logoClicks = useRef(0);
+  const lastLogoClick = useRef(0);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -22,10 +24,9 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
 
   const navLinks = [
     { label: 'Inicio', href: '#inicio' },
-    { label: 'Steam Deck', href: '#steam-deck' },
-    { label: 'Legion Go', href: '#legion-go' },
     { label: 'Catálogo', href: '#catalogo', onClick: onOpenCatalog },
     { label: 'Experiencia', href: '#experiencia' },
+    { label: 'Nosotros', href: '#nosotros' },
     { label: 'Contacto', href: '#contacto' }
   ];
 
@@ -45,6 +46,17 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
           {/* Zone 1: High-Impact Brand Identity & Logo */}
           <a
             href="#inicio"
+            onClick={(event) => {
+              const now = Date.now();
+              logoClicks.current = now - lastLogoClick.current < 10000 ? logoClicks.current + 1 : 1;
+              lastLogoClick.current = now;
+              if (logoClicks.current === 4) {
+                event.preventDefault();
+                logoClicks.current = 0;
+                setMobileMenuOpen(false);
+                onOpenAdmin?.();
+              }
+            }}
             className="group flex items-center shrink-0 focus:outline-none"
             aria-label="Handheld Inicio"
           >
@@ -67,15 +79,6 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
 
           {/* Zone 3: High-Priority Action Zone */}
           <div className="flex items-center gap-3 shrink-0">
-            {onOpenAdmin && (
-              <button
-                onClick={onOpenAdmin}
-                title="Panel de Administración Privado"
-                className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-mono-tech text-white/60 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] rounded-xl transition-colors whitespace-nowrap"
-              >
-                <span>Admin</span>
-              </button>
-            )}
 
             {/* High-Impact WhatsApp Primary Button */}
             <a
@@ -111,7 +114,7 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
             <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
               <HandheldLogo size="md" showWordmark={true} />
               <span className="text-[10px] font-mono-tech text-[#3678FF] uppercase tracking-widest">
-                ARGENTINA
+                MENÚ
               </span>
             </div>
 
@@ -131,18 +134,6 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
                 </a>
               ))}
 
-              {onOpenAdmin && (
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenAdmin();
-                  }}
-                  className="text-xl font-bold font-display text-[#3678FF] hover:text-white py-2 flex items-center justify-between border-b border-white/[0.04] transition-colors text-left"
-                >
-                  <span className="tracking-wide uppercase">Administración Privada</span>
-                  <ArrowUpRight className="w-5 h-5 text-[#3678FF]" />
-                </button>
-              )}
             </div>
           </div>
 

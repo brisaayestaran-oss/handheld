@@ -1,242 +1,43 @@
 import React, { useState } from 'react';
-import { Monitor, Battery, Cpu, Gamepad2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Monitor, Cpu, Gamepad2 } from 'lucide-react';
 
-export const ExperienceSection: React.FC<Props> = () => {
-  const [activeTab, setActiveTab] = useState<'screen' | 'os' | 'controls' | 'cooling'>('screen');
+const models = [
+  { name:'Steam Deck LCD', panel:'7″ IPS LCD · 1280 × 800 · 60 Hz', detail:'Pantalla LCD nítida para jugar en SteamOS.', power:'AMD Zen 2 + RDNA 2', usage:'Ideal para entrar al gaming portátil.', color:'#7CA4CD' },
+  { name:'Steam Deck OLED', panel:'7,4″ OLED HDR · 1280 × 800 · 90 Hz', detail:'Negros profundos, mejor contraste y 50 Wh de batería.', power:'AMD Zen 2 + RDNA 2 (6 nm)', usage:'Ideal para quienes priorizan pantalla y autonomía.', color:'#6796FF' },
+  { name:'Lenovo Legion Go', panel:'8,8″ IPS QHD+ · 2560 × 1600 · 144 Hz', detail:'Mayor resolución, pantalla grande y controles desmontables.', power:'AMD Ryzen Z1 Extreme', usage:'Ideal para jugar con Windows y más versatilidad.', color:'#A097FF' }
+];
+const features = [
+  {key:'panel', title:'Pantalla', icon:Monitor},
+  {key:'power', title:'Procesador', icon:Cpu},
+  {key:'usage', title:'¿Para quién?', icon:Gamepad2}
+] as const;
 
-  const tabs = [
-    { id: 'screen' as const, label: 'Tecnología de Pantalla' },
-    { id: 'os' as const, label: 'Ecosistema & Sistema Operativo' },
-    { id: 'controls' as const, label: 'Controles & Ergonomía' },
-    { id: 'cooling' as const, label: 'Arquitectura & Refrigeración' }
-  ];
-
+export const ExperienceSection: React.FC = () => {
+  const [active, setActive] = useState<(typeof features)[number]['key']>('panel');
   return (
-    <section id="experiencia" className="relative py-28 bg-[#050507] border-t border-white/[0.05] overflow-hidden">
-      {/* Background Ambience */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[#3678FF]/5 blur-[160px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-mono-tech text-[#3678FF] uppercase tracking-widest block mb-3">
-            03. INGENIERÍA DE EXPERIENCIA
-          </span>
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black font-display text-white tracking-tight leading-tight uppercase">
-            LA LIBERTAD DE JUGAR <br />
-            <span className="bg-gradient-to-r from-white via-[#C8CAD1] to-white/70 bg-clip-text text-transparent">
-              ESTÁ EN TUS MANOS.
-            </span>
-          </h2>
-          <p className="mt-5 text-base sm:text-lg text-[#C8CAD1] leading-relaxed">
-            Elegir la consola adecuada depende de tu estilo de juego. Compará en tiempo real
-            las dos filosofías dominantes del hardware portátil.
-          </p>
+    <section id="experiencia" className="relative bg-transparent py-16 sm:py-20">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div className="mb-7">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[.20em] text-[#90A8FF]">COMPARÁ ANTES DE ELEGIR</p>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">¿Qué consola va con vos?</h2>
+          <p className="mt-3 text-base text-[#C8CAD1]">Tres pantallas y tres experiencias diferentes, explicadas sin vueltas.</p>
         </div>
-
-        {/* Interactive Comparison Switcher */}
-        <div className="flex justify-center mb-12 overflow-x-auto pb-2">
-          <div className="inline-flex items-center gap-1.5 p-1.5 bg-[#101115] rounded-2xl border border-white/[0.08]">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-5 py-2.5 text-xs sm:text-sm font-semibold rounded-xl transition-all whitespace-nowrap ${
-                  activeTab === tab.id
-                    ? 'bg-[#20232B] text-white shadow-md border border-white/[0.12]'
-                    : 'text-[#C8CAD1]/70 hover:text-white'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
+        <div className="mb-6 grid grid-cols-3 gap-2 sm:flex sm:flex-wrap" role="group" aria-label="Comparar características">
+          {features.map(item=>{
+            const Icon=item.icon;
+            return <button key={item.key} onClick={()=>setActive(item.key)} aria-pressed={active===item.key}
+              className={`inline-flex min-h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border px-1.5 sm:px-4 py-2.5 text-[11px] sm:text-sm font-semibold transition-colors ${active===item.key?'bg-[#3678FF] border-[#6D98FF] text-white':'bg-[#151821] border-white/15 text-[#E3E6F0] hover:border-white/40'}`}><Icon size={15} className="shrink-0"/>{item.title}</button>;
+          })}
         </div>
-
-        {/* Tab Content Cards (2-column head-to-head architectural showdown) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Card 1: Steam Deck Approach */}
-          <div className="p-8 rounded-3xl bg-[#101115] border border-white/[0.08] hover:border-[#3678FF]/40 transition-all flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between text-xs font-mono-tech text-[#C8CAD1]/70 pb-4 border-b border-white/[0.06]">
-                <span className="text-[#3678FF] font-bold">FILOSOFÍA CONSOLA INTEGRADA</span>
-                <span>VALVE STEAM DECK</span>
-              </div>
-
-              {activeTab === 'screen' && (
-                <div className="mt-6 space-y-4">
-                  <h4 className="text-2xl font-bold font-display text-white">Panel OLED HDR 90Hz</h4>
-                  <p className="text-sm text-[#C8CAD1] leading-relaxed">
-                    Prioriza el contraste infinito, la fidelidad de color absoluta (110% DCI-P3) y la eficiencia energética. Los 1280x800 píxeles son ideales para la APU, entregando 60 a 90 FPS fluidos con tiempos de batería récord.
-                  </p>
-                  <ul className="space-y-2.5 text-xs text-[#C8CAD1]/90 pt-2 font-mono-tech">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#3678FF]" />
-                      <span>Negros 0.0 nits con brillo pico HDR de 1000 nits</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#3678FF]" />
-                      <span>Respuesta táctil y de píxel de 0.1 milisegundos</span>
-                    </li>
-                  </ul>
-                </div>
-              )}
-
-              {activeTab === 'os' && (
-                <div className="mt-6 space-y-4">
-                  <h4 className="text-2xl font-bold font-display text-white">SteamOS 3.5 con Proton</h4>
-                  <p className="text-sm text-[#C8CAD1] leading-relaxed">
-                    Experiencia inmediata estilo consola. Suspensión instantánea en medio de una partida (Sleep/Resume en 1 segundo), sincronización automática de partidas en la nube de Steam y compatibilidad verificada sin lidiar con drivers.
-                  </p>
-                  <ul className="space-y-2.5 text-xs text-[#C8CAD1]/90 pt-2 font-mono-tech">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#3678FF]" />
-                      <span>Cero bloatware: interfaz ultra fluida sin ventanas emergentes</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#3678FF]" />
-                      <span>Modo escritorio Arch Linux con un solo toque</span>
-                    </li>
-                  </ul>
-                </div>
-              )}
-
-              {activeTab === 'controls' && (
-                <div className="mt-6 space-y-4">
-                  <h4 className="text-2xl font-bold font-display text-white">Ergonomía de Mano & Trackpads</h4>
-                  <p className="text-sm text-[#C8CAD1] leading-relaxed">
-                    Diseñada para no forzar las muñecas durante sesiones de 4 horas continuas. Sus dos trackpads con motores hápticos LRA permiten jugar a Age of Empires, Civilization o títulos de puntería con comodidad inigualable.
-                  </p>
-                  <ul className="space-y-2.5 text-xs text-[#C8CAD1]/90 pt-2 font-mono-tech">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#3678FF]" />
-                      <span>4 botones traseros de agarre programables</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#3678FF]" />
-                      <span>Giroscopio asistido capacitivo de alta precisión</span>
-                    </li>
-                  </ul>
-                </div>
-              )}
-
-              {activeTab === 'cooling' && (
-                <div className="mt-6 space-y-4">
-                  <h4 className="text-2xl font-bold font-display text-white">Silicio de 6nm y 15W Silencioso</h4>
-                  <p className="text-sm text-[#C8CAD1] leading-relaxed">
-                    El nuevo disipador más grande y el ventilador silencioso mantienen la consola fresca a revoluciones bajas. El TDP de 15W asegura que la temperatura en las manos permanezca siempre confortable.
-                  </p>
-                  <ul className="space-y-2.5 text-xs text-[#C8CAD1]/90 pt-2 font-mono-tech">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#3678FF]" />
-                      <span>Hasta 12 horas en emulación y títulos indie</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#3678FF]" />
-                      <span>Flujo de aire optimizado alejado del usuario</span>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-8 pt-4 border-t border-white/[0.06] text-xs font-mono-tech text-[#C8CAD1]/50">
-              RECOMENDADA: Para quien busca facilidad, ergonomía impecable y jugar la biblioteca de Steam al instante.
-            </div>
-          </div>
-
-          {/* Card 2: Lenovo Legion Go Approach */}
-          <div className="p-8 rounded-3xl bg-[#101115] border border-white/[0.08] hover:border-[#7655FF]/40 transition-all flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between text-xs font-mono-tech text-[#C8CAD1]/70 pb-4 border-b border-white/[0.06]">
-                <span className="text-[#7655FF] font-bold">FILOSOFÍA POTENCIA TOTAL</span>
-                <span>LENOVO LEGION GO</span>
-              </div>
-
-              {activeTab === 'screen' && (
-                <div className="mt-6 space-y-4">
-                  <h4 className="text-2xl font-bold font-display text-white">Pantalla 8.8" QHD+ a 144Hz</h4>
-                  <p className="text-sm text-[#C8CAD1] leading-relaxed">
-                    La pantalla más grande del segmento con resolución nativa de 2560 x 1600. Permite un nivel de detalle fotográfico inaudito para shooters, simuladores y películas, con tasa de 144Hz ultra suave.
-                  </p>
-                  <ul className="space-y-2.5 text-xs text-[#C8CAD1]/90 pt-2 font-mono-tech">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#7655FF]" />
-                      <span>Espacio de color 97% DCI-P3 con 500 nits de brillo</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#7655FF]" />
-                      <span>Panel táctil de 10 puntos de respuesta inmediata</span>
-                    </li>
-                  </ul>
-                </div>
-              )}
-
-              {activeTab === 'os' && (
-                <div className="mt-6 space-y-4">
-                  <h4 className="text-2xl font-bold font-display text-white">Windows 11 Home Sin Restricciones</h4>
-                  <p className="text-sm text-[#C8CAD1] leading-relaxed">
-                    Libertad total. Ejecutá Xbox Game Pass con juegos instalados localmente, Fortnite con Easy Anti-Cheat, Genshin Impact, Call of Duty Warzone, clientes de emulación y cualquier software de Windows que uses a diario.
-                  </p>
-                  <ul className="space-y-2.5 text-xs text-[#C8CAD1]/90 pt-2 font-mono-tech">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#7655FF]" />
-                      <span>Legion Space para acceso centralizado a launchers</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#7655FF]" />
-                      <span>Compatible con todos los sistemas anti-trampas</span>
-                    </li>
-                  </ul>
-                </div>
-              )}
-
-              {activeTab === 'controls' && (
-                <div className="mt-6 space-y-4">
-                  <h4 className="text-2xl font-bold font-display text-white">TrueStrike & Modo Mouse FPS</h4>
-                  <p className="text-sm text-[#C8CAD1] leading-relaxed">
-                    Mandos desacoplables con joysticks de efecto Hall magnéticos (anti-drift permanente). El mando derecho se convierte en mouse de agarre vertical para apuntado competitivo en Counter Strike o Apex Legends.
-                  </p>
-                  <ul className="space-y-2.5 text-xs text-[#C8CAD1]/90 pt-2 font-mono-tech">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#7655FF]" />
-                      <span>Soporte kickstand integrado para modo mesa</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#7655FF]" />
-                      <span>Trackpad óptico y rueda de desplazamiento física</span>
-                    </li>
-                  </ul>
-                </div>
-              )}
-
-              {activeTab === 'cooling' && (
-                <div className="mt-6 space-y-4">
-                  <h4 className="text-2xl font-bold font-display text-white">AMD Z1 Extreme & Coldfront</h4>
-                  <p className="text-sm text-[#C8CAD1] leading-relaxed">
-                    Hasta 30W de potencia en modo personalizado. El sistema térmico Legion Coldfront con aspas de polímero de cristal líquido disipa el calor eficientemente en largas sesiones de juego exigente.
-                  </p>
-                  <ul className="space-y-2.5 text-xs text-[#C8CAD1]/90 pt-2 font-mono-tech">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#7655FF]" />
-                      <span>Dos puertos USB 4.0 con velocidades de 40 Gbps</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#7655FF]" />
-                      <span>Carga rápida Super Rapid Charge</span>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-8 pt-4 border-t border-white/[0.06] text-xs font-mono-tech text-[#C8CAD1]/50">
-              RECOMENDADA: Para quien busca máxima potencia, pantalla gigante y jugar Game Pass o juegos con anti-cheat.
-            </div>
-          </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {models.map(item=><article key={item.name} className="rounded-2xl border border-white/10 bg-[#11131A] p-6">
+            <div className="mb-4 h-1 w-10 rounded-full" style={{backgroundColor:item.color}}/>
+            <h3 className="text-xl font-bold text-white">{item.name}</h3>
+            <p className="mt-4 text-base font-semibold leading-snug text-white">{item[active]}</p>
+            <p className="mt-3 text-sm leading-relaxed text-[#C8CAD1]">{active==='panel'?item.detail:active==='power'?'Rendimiento para juegos de PC en formato portátil.':'Compará capacidades y disponibilidad en el catálogo.'}</p>
+          </article>)}
         </div>
       </div>
     </section>
   );
 };
-interface Props {}

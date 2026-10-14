@@ -16,13 +16,13 @@ export const PRODUCTS: Product[] = [
     model: 'OLED HDR 90Hz',
     subtitle: 'La cúspide del gaming portátil con negros puros y autonomía extendida',
     slug: 'steam-deck-oled',
-    condition: 'Reacondicionado Certificado',
+    condition: 'Caja abierta · poco uso',
     category: 'Consolas Portátiles',
     isFeatured: true,
     displayOrder: 1,
-    availability: 'Disponible Inmediato',
-    shortDescription: 'Pantalla OLED HDR de 7.4 pulgadas a 90 Hz, APU Sephiroth de 6nm más eficiente, batería de 50Wh y Wi-Fi 6E de ultra baja latencia.',
-    fullDescription: 'La Steam Deck OLED es la evolución definitiva del hardware de Valve. Diseñada específicamente para sesiones prolongadas de juego sin fatiga visual ni caídas de fotogramas, su panel OLED HDR entrega negros absolutos con contraste 1.000.000:1 y 1.000 nits de brillo pico. Gracias a su nuevo silicio de 6nm y su batería optimizada de 50 Wh, ofrece entre un 30% y un 50% más de tiempo de juego por carga.',
+    availability: 'Agotado Temporal',
+    shortDescription: 'Pantalla OLED HDR de 7,4 pulgadas y hasta 90 Hz. Caja abierta, usada con poco uso.',
+    fullDescription: 'La Steam Deck OLED combina una pantalla OLED HDR de 7,4 pulgadas con controles completos y SteamOS para jugar a títulos compatibles de Steam. Este modelo se ofrece como equipo de caja abierta y poco uso; el estado, la batería y los accesorios deben confirmarse sobre la unidad concreta.',
     keyHighlights: [
       'Pantalla OLED HDR de 7.4" (1280 x 800) a 90Hz con 1.000 nits de pico',
       'APU AMD Sephiroth personalizada de 6nm (Zen 2 + RDNA 2)',
@@ -55,14 +55,14 @@ export const PRODUCTS: Product[] = [
         capacity: '512 GB NVMe',
         priceUSD: 790,
         priceARSApprox: 948000,
-        inStock: true,
+        inStock: false,
         sku: 'SD-OLED-512'
       },
       {
         capacity: '1 TB NVMe (Vidrio Grabado)',
         priceUSD: 940,
         priceARSApprox: 1128000,
-        inStock: true,
+        inStock: false,
         sku: 'SD-OLED-1TB'
       }
     ],
@@ -82,13 +82,13 @@ export const PRODUCTS: Product[] = [
     model: 'AMD Ryzen Z1 Extreme',
     subtitle: 'El titán del rendimiento con pantalla 8.8" QHD+ y mandos TrueStrike desmontables',
     slug: 'lenovo-legion-go',
-    condition: 'Reacondicionado Certificado',
+    condition: 'Caja abierta · poco uso',
     category: 'Consolas Portátiles',
     isFeatured: true,
     displayOrder: 2,
-    availability: 'Disponible Inmediato',
-    shortDescription: 'Potencia descomunal con AMD Ryzen Z1 Extreme, descomunal panel 8.8" QHD+ a 144Hz, mandos desmontables y modo FPS mouse con sensor óptico.',
-    fullDescription: 'La Lenovo Legion Go redefine la versatilidad gaming en formato portátil. Equipada con el procesador AMD Ryzen Z1 Extreme con 8 núcleos Zen 4 y 12 unidades de cómputo RDNA 3, ofrece potencia de calibre de escritorio en tus manos. Su enorme pantalla Lenovo PureSight de 8.8 pulgadas a 144 Hz y 2560x1600 de resolución deja boquiabierto a cualquier jugador. Sus mandos TrueStrike desmontables permiten jugar con kickstand en modo mesa o transformarse en un mouse de precisión vertical para shooters competitivos.',
+    availability: 'Agotado Temporal',
+    shortDescription: 'Pantalla 8,8 pulgadas hasta 144 Hz, Ryzen Z1 Extreme y controles desmontables. Caja abierta, poco uso.',
+    fullDescription: 'La Lenovo Legion Go con procesador AMD Ryzen Z1 Extreme integra una pantalla de 8,8 pulgadas, Windows y controles desmontables. Podés jugar en modo portátil o apoyarla para usar otros controles. Consultá estado, autonomía y accesorios de la unidad específica, además de compatibilidad con tus juegos.',
     keyHighlights: [
       'Procesador AMD Ryzen Z1 Extreme (8 núcleos / 16 hilos hasta 5.1 GHz)',
       'Pantalla gigante de 8.8" QHD+ (2560 x 1600) IPS a 144Hz con 500 nits',
@@ -121,21 +121,21 @@ export const PRODUCTS: Product[] = [
         capacity: '512 GB NVMe Gen4',
         priceUSD: 850,
         priceARSApprox: 1020000,
-        inStock: true,
+        inStock: false,
         sku: 'LLG-Z1E-512'
       },
       {
         capacity: '1 TB NVMe Gen4',
         priceUSD: 980,
         priceARSApprox: 1176000,
-        inStock: true,
+        inStock: false,
         sku: 'LLG-Z1E-1TB'
       },
       {
         capacity: '2 TB NVMe Gen4 Ultra',
         priceUSD: 1150,
         priceARSApprox: 1380000,
-        inStock: true,
+        inStock: false,
         sku: 'LLG-Z1E-2TB'
       }
     ],
@@ -152,22 +152,22 @@ export const PRODUCTS: Product[] = [
     id: 'steam-deck-lcd-refurbished',
     brand: 'Valve',
     name: 'Steam Deck LCD',
-    model: 'LCD 60Hz Reacondicionado',
+    model: 'LCD 60Hz',
     subtitle: 'La puerta de entrada más inteligente al gaming portátil de PC',
     slug: 'steam-deck-lcd',
-    condition: 'Reacondicionado Certificado',
+    condition: 'Caja abierta · poco uso',
     category: 'Consolas Portátiles',
     isFeatured: true,
     displayOrder: 3,
-    availability: 'Disponible Inmediato',
-    shortDescription: 'Excelente relación precio/calidad. Pantalla LCD 7" a 60Hz, APU AMD Zen 2 + RDNA 2, revisada exhaustivamente con garantía de funcionamiento.',
-    fullDescription: 'La Steam Deck LCD original revolucionó para siempre la industria de los videojuegos portátiles. Estas unidades reacondicionadas certificadas han pasado por una inspección rigurosa de más de 30 puntos: calibración de joysticks y gatillos, comprobación de estado de batería superior al 95%, verificación de puertos y limpieza completa. Incluye cargador rápido original y funda protectora rígida.',
+    availability: 'Agotado Temporal',
+    shortDescription: 'Pantalla LCD de 7 pulgadas a 60 Hz y SteamOS. Caja abierta, usada con poco uso.',
+    fullDescription: 'Steam Deck LCD es una alternativa de entrada al gaming portátil con pantalla de 7 pulgadas y SteamOS. El equipo es de caja abierta y poco uso. Pedí fotografías reales, estado de batería, accesorios incluidos y condiciones de compra de la unidad disponible.',
     keyHighlights: [
-      'Relación precio-calidad insuperable para jugar títulos AAA de PC',
+      'Opción para entrar al gaming portátil con SteamOS',
       'Pantalla IPS LCD brillante de 7" (1280 x 800) a 60 Hz',
       'APU AMD personalizada (Zen 2 + RDNA 2 de 15W)',
       'SteamOS preinstalado con acceso instantáneo a tu biblioteca',
-      'Unidad testeada en banco de pruebas con garantía directa'
+      'Consultá el estado y los accesorios específicos de la unidad'
     ],
     specs: {
       processor: 'AMD Zen 2 de 4 núcleos / 8 hilos (2.4 - 3.5 GHz), proceso 7 nm',
@@ -194,14 +194,14 @@ export const PRODUCTS: Product[] = [
         capacity: '256 GB NVMe',
         priceUSD: 520,
         priceARSApprox: 624000,
-        inStock: true,
+        inStock: false,
         sku: 'SD-LCD-256'
       },
       {
         capacity: '512 GB NVMe',
         priceUSD: 590,
         priceARSApprox: 708000,
-        inStock: true,
+        inStock: false,
         sku: 'SD-LCD-512'
       }
     ],

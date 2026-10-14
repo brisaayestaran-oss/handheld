@@ -1,6 +1,6 @@
 export type ConsoleBrand = 'Valve' | 'Lenovo' | 'ASUS ROG' | 'Nintendo' | 'Otras';
 
-export type ProductCondition = 'Reacondicionado Certificado' | 'Usado Seleccionado';
+export type ProductCondition = 'Reacondicionado Certificado' | 'Usado Seleccionado' | 'Caja abierta · poco uso';
 
 export type AvailabilityStatus = 'Disponible Inmediato' | 'Bajo Pedido (48-72h)' | 'Agotado Temporal';
 
@@ -50,6 +50,7 @@ export interface Product {
   selectedVariantIndex?: number;
   accentColor: string;
   badge?: string;
+  realPhotos?: string[];
   galleryImages: {
     title: string;
     description: string;
@@ -68,6 +69,7 @@ export interface BrandConfig {
   whatsappDisplay: string;
   instagramHandle: string;
   instagramUrl: string;
+  facebookUrl: string;
   tiktokHandle: string;
   tiktokUrl: string;
   shippingNotice: string;

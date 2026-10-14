@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { Product, ConsoleBrand, ProductCondition } from '../types/catalog';
+import { Product } from '../types/catalog';
 import { brandConfig, buildWhatsAppLink } from '../config/brand';
+import { recordInterest } from '../services/interestAnalytics';
 import { SteamDeckVisual } from './visuals/SteamDeckVisual';
 import { LegionGoVisual } from './visuals/LegionGoVisual';
 import { Search, MessageCircle, ArrowUpRight, Check, SlidersHorizontal, Info } from 'lucide-react';
@@ -12,26 +13,25 @@ interface Props {
 
 export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) => {
   const [selectedBrand, setSelectedBrand] = useState<string>('Todas');
-  const [selectedCondition, setSelectedCondition] = useState<string>('Todos');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedVariantByProduct, setSelectedVariantByProduct] = useState<Record<string, number>>({});
 
   const brands = ['Todas', 'Valve', 'Lenovo'];
-  const conditions = ['Todos', 'Reacondicionado Certificado'];
+
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       const matchBrand = selectedBrand === 'Todas' || product.brand === selectedBrand;
-      const matchCondition = selectedCondition === 'Todos' || product.condition === selectedCondition;
+
       const matchQuery =
         searchQuery.trim() === '' ||
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.model.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
 
-      return matchBrand && matchCondition && matchQuery;
+      return matchBrand && matchQuery;
     });
-  }, [products, selectedBrand, selectedCondition, searchQuery]);
+  }, [products, selectedBrand, searchQuery]);
 
   const handleSelectVariant = (productId: string, variantIndex: number, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -42,7 +42,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
   };
 
   return (
-    <section id="catalogo" className="relative py-28 bg-[#08090C] border-t border-white/[0.05]">
+    <section id="catalogo" className="relative scroll-mt-24 py-16 sm:py-20 bg-transparent">
       {/* Soft background glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-radial from-[#3678FF]/5 to-transparent blur-3xl pointer-events-none" />
 
@@ -51,18 +51,16 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <span className="text-xs font-mono-tech text-[#3678FF] uppercase tracking-widest block mb-2">
-              CATÁLOGO OFICIAL · STOCK EN ARGENTINA
+              CONSOLAS PORTÁTILES · CAJA ABIERTA Y USADAS
             </span>
             <h2 className="text-3xl sm:text-5xl font-black font-display text-white tracking-tight uppercase">
-              HARDWARE SELECCIONADO
+              ELEGÍ TU CONSOLA
             </h2>
-            <p className="mt-2 text-xs sm:text-sm text-[#C8CAD1]/70 max-w-xl">
-              Consolas portátiles reacondicionadas certificadas con testeo exhaustivo de más de 30 puntos.
-            </p>
+
           </div>
           <div className="flex items-center gap-2 text-xs font-mono-tech text-[#C8CAD1]/60">
             <Info className="w-4 h-4 text-[#3678FF]" />
-            <span>Valores de catálogo de demostración · Consulta stock y cotización diaria por WhatsApp</span>
+            <span>Consultá stock y cotización diaria por WhatsApp</span>
           </div>
         </div>
 
@@ -86,22 +84,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
           </div>
 
           {/* Condition Tabs */}
-          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#050507] rounded-xl border border-white/[0.06]">
-            {conditions.map((cond) => (
-              <button
-                key={cond}
-                onClick={() => setSelectedCondition(cond)}
-                className={`px-3 py-2 text-xs font-medium rounded-lg transition-all whitespace-nowrap ${
-                  selectedCondition === cond
-                    ? 'bg-[#20232B] text-white shadow-sm border border-white/[0.12]'
-                    : 'text-[#C8CAD1] hover:text-white'
-                }`}
-              >
-                {cond === 'Todos' ? 'Todos los Estados' : cond}
-              </button>
-            ))}
-          </div>
-
+          {/* Estado de todos los equipos: caja abierta y poco uso. */}
           {/* Search Input */}
           <div className="relative min-w-[220px]">
             <Search className="w-4 h-4 text-[#C8CAD1]/50 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -124,7 +107,6 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
             <button
               onClick={() => {
                 setSelectedBrand('Todas');
-                setSelectedCondition('Todos');
                 setSearchQuery('');
               }}
               className="mt-6 px-5 py-2.5 text-xs font-bold text-white bg-[#20232B] hover:bg-white/10 rounded-xl transition-colors border border-white/10"
@@ -133,7 +115,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
             {filteredProducts.map((product) => {
               const activeVariantIdx = selectedVariantByProduct[product.id] ?? 0;
               const currentVariant = product.variants[activeVariantIdx] || product.variants[0];
@@ -155,35 +137,20 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
                         </span>
                         <span className="text-[11px] font-mono-tech text-[#C8CAD1]/50">· {product.condition}</span>
                       </div>
-                      <div>
-                        {product.availability === 'Disponible Inmediato' ? (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-mono-tech font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                            Disponible
-                          </span>
-                        ) : product.availability === 'Bajo Pedido (48-72h)' ? (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-mono-tech font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
-                            Bajo Pedido
-                          </span>
-                        ) : (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-mono-tech text-white/50 border border-white/10">
-                            Sin Stock
-                          </span>
-                        )}
-                      </div>
+                      <div><span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 text-[10px] font-semibold text-emerald-300">En stock · planilla</span></div>
                     </div>
 
                     {/* Real Console Photography Display */}
                     <div className="py-6 px-2 flex items-center justify-center min-h-[200px] transition-transform duration-500 group-hover:scale-105">
                       <img
                         src={
-                          product.brand === 'Lenovo'
+                          product.realPhotos?.[0] || (product.brand === 'Lenovo'
                             ? '/assets/consoles/lenovo-legion-go/legion-go-official-main.png'
-                            : '/assets/consoles/steam-deck/steam-deck-hero.png'
+                            : product.id === 'steam-deck-lcd-refurbished' ? '/Steam%20deck/steamdeck_renderings/rendering07.webp' : '/Steam%20deck/steam_deck_oled/press_front_home.webp')
                         }
-                        alt={`${product.name} Oficial`}
+                        alt={`${product.name} · ${product.realPhotos?.length ? 'foto real de la unidad' : 'imagen ilustrativa del modelo'}`}
                         className="w-full max-h-[170px] object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.95)] contrast-[1.03]"
-                        referrerPolicy="no-referrer"
+                        loading="lazy" decoding="async" referrerPolicy="no-referrer"
                       />
                     </div>
                   </div>
@@ -198,21 +165,22 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
                         {product.shortDescription}
                       </p>
 
+                      <p className="mt-3 text-[11px] text-[#AFC0DC]">Imagen ilustrativa. Pedí fotos reales, accesorios, estado de batería y garantía aplicable a la unidad.</p>
                       {/* Storage Variants selector (Clickable buttons) */}
                       {product.variants.length > 1 && (
                         <div className="mt-4 pt-4 border-t border-white/[0.06]">
-                          <span className="text-[10px] font-mono-tech text-[#C8CAD1]/50 uppercase tracking-wider block mb-2">
+                          <span className="text-sm font-semibold text-white uppercase tracking-wider block mb-3">
                             Almacenamiento:
                           </span>
-                          <div className="flex flex-wrap gap-1.5">
+                          <div className="flex flex-wrap gap-2">
                             {product.variants.map((variant, idx) => (
                               <button
                                 key={variant.sku}
                                 onClick={(e) => handleSelectVariant(product.id, idx, e)}
-                                className={`px-2.5 py-1 text-[11px] font-mono-tech rounded-md transition-all ${
+                                className={`min-h-11 px-4 py-2 text-sm font-semibold rounded-xl border transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#87AAFF] ${
                                   activeVariantIdx === idx
-                                    ? 'bg-white text-black font-bold'
-                                    : 'bg-[#20232B] text-[#C8CAD1] hover:text-white hover:bg-white/[0.08]'
+                                    ? 'bg-[#3678FF] text-white border-[#7EA5FF] shadow-[0_0_18px_rgba(54,120,255,.35)]'
+                                    : 'bg-[#20232B] text-white border-white/20 hover:border-white/50 hover:bg-white/[0.12]'
                                 }`}
                               >
                                 {variant.capacity}
@@ -224,18 +192,13 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
                     </div>
 
                     {/* Pricing & Footer Actions */}
-                    <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between gap-3">
+                    <div className="mt-6 pt-4 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <div className="text-[10px] font-mono-tech text-[#C8CAD1]/50 uppercase tracking-wider">
-                          Precio de Venta
+                          Precio directo · sin envío
                         </div>
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="text-2xl font-black font-display text-white tabular-nums tracking-tight">
-                            US$ {currentVariant.priceUSD}
-                          </span>
-                          <span className="text-[11px] font-mono-tech text-[#C8CAD1]/50">
-                            (~${(currentVariant.priceARSApprox / 1000).toFixed(0)}k ARS)
-                          </span>
+                        <div className="whitespace-nowrap text-[clamp(1.15rem,4.4vw,1.5rem)] font-black font-display text-white tabular-nums tracking-tight">
+                          $ {Number(currentVariant.priceARSApprox).toLocaleString('es-AR', { maximumFractionDigits: 0 })}
                         </div>
                       </div>
 
@@ -245,8 +208,8 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
                           href={whatsappUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          title="Consultar disponibilidad por WhatsApp"
+                          onClick={(e) => { e.stopPropagation(); recordInterest('purchase_click', { id: currentVariant.sku, name: product.name, capacity: currentVariant.capacity }, 'whatsapp'); }}
+                          title="Consultar disponibilidad por WhatsApp" aria-label={`Consultar por WhatsApp sobre ${product.name}, ${currentVariant.capacity}`}
                           className="p-2.5 rounded-xl bg-white/[0.04] hover:bg-[#3678FF] hover:text-white text-[#3678FF] border border-white/[0.08] transition-colors"
                         >
                           <MessageCircle className="w-4 h-4" />

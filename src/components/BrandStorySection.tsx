@@ -8,49 +8,43 @@ export const BrandStorySection: React.FC = () => {
     {
       icon: Eye,
       title: 'Especialización Exclusiva',
-      desc: 'No vendemos electrodomésticos genéricos. Nuestro foco absoluto es el ecosistema de consolas portátiles de PC: conocemos cada arquitectura, versión de BIOS y configuración al detalle.'
+      desc: 'Nos especializamos en consolas portátiles y te ayudamos a comparar modelos.'
     },
     {
       icon: HeartHandshake,
       title: 'Asesoramiento Personalizado',
-      desc: 'Te ayudamos a elegir la consola que verdaderamente coincide con tu catálogo de juegos, tu tiempo disponible y tus expectativas de batería, antes de que gastes un solo peso.'
+      desc: 'Te orientamos según los juegos que preferís, tu presupuesto y lo que necesitás.'
     },
     {
       icon: ShieldCheck,
       title: 'Transparencia Técnica Real',
-      desc: 'Sin letras chicas. Informamos con total claridad el estado exacto de cada equipo reacondicionado certificado, sus capacidades técnicas y compatibilidades con cada launcher.'
+      desc: 'Te contamos el estado, las características y la disponibilidad de cada equipo.'
     },
     {
       icon: Sparkles,
       title: 'Pasión por el Gaming',
-      desc: 'Probamos cada hardware nosotros mismos. Compartimos configuraciones óptimas de TDP, ajustes de rendimiento por juego y guías para que le saques el 100% desde el primer día.'
+      desc: 'Compartimos información y recomendaciones para que aproveches tu consola.'
     }
   ];
 
   return (
-    <section id="nosotros" className="relative py-28 bg-[#08090C] border-t border-white/[0.05]">
+    <section id="nosotros" className="relative py-16 sm:py-20 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <HandheldLogo size="lg" showWordmark={true} withGlow={true} />
-          </div>
+        <div className="text-center max-w-3xl mx-auto mb-10">
           <span className="text-xs font-mono-tech text-[#3678FF] uppercase tracking-widest block mb-3">
-            04. NUESTRA VISIÓN
+            ¿QUIÉNES SOMOS?
           </span>
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black font-display text-white tracking-tight leading-tight uppercase">
-            TECNOLOGÍA PARA LOS QUE <br />
-            <span className="bg-gradient-to-r from-white via-[#C8CAD1] to-white/70 bg-clip-text text-transparent">
-              QUIEREN MÁS.
-            </span>
+          <h2 className="text-3xl sm:text-5xl md:text-4xl font-black font-display text-white tracking-tight leading-tight uppercase">
+            DESDE ARGENTINA, <br />
+            <span className="text-[#80B7F0]">PARA TODOS LOS ARGENTINOS.</span>
           </h2>
           <p className="mt-5 text-base sm:text-lg text-[#C8CAD1] leading-relaxed">
-            {brandConfig.brandName} nace con un objetivo claro: acercar a los jugadores de Argentina
-            el mejor hardware portátil internacional con asesoramiento honesto y comunicación directa.
+            En HANDHELD queremos acercar consolas portátiles a jugadores de todo el país, con asesoramiento personalizado, información clara y atención cercana.
           </p>
         </div>
 
         {/* 4 Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-sm:hidden">
           {pillars.map((pillar, idx) => {
             const Icon = pillar.icon;
             return (
