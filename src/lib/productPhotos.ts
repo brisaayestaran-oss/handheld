@@ -15,7 +15,7 @@ export async function getProductPhotos():Promise<Record<number,string[]>> {
 }
 export async function uploadProductPhoto(row:number,file:File):Promise<void>{
  const c=getSupabaseClient();if(!c)throw Error('Supabase no configurado');
- if(![13,14,15,16,17,18].includes(row))throw Error('Unidad inválida');
+ if(!Number.isSafeInteger(row)||row<=0)throw Error('Unidad inválida');
  if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>5*1024*1024)throw Error('Usá JPG, PNG o WebP de hasta 5 MB');
  const {data:{user}}=await c.auth.getUser();if(!user)throw Error('Iniciá sesión primero');
  const previous=await listProductPhotos(row);

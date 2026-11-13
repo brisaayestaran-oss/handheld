@@ -32,6 +32,7 @@ export interface StorageVariant {
 
 export interface Product {
   id: string;
+  photoStorageRow?: number;
   brand: ConsoleBrand;
   name: string;
   model: string;

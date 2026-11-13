@@ -8,7 +8,7 @@ export function AdminPhotoUploader({ product }: { product: Product }) {
  const [busy,setBusy]=React.useState(false);
  const [loading,setLoading]=React.useState(true);
  const [status,setStatus]=React.useState('');
- const row=Number(product.id.split('-').at(-1));
+ const row=product.photoStorageRow ?? Number(product.id.split('-').at(-1));
  const refresh=React.useCallback(async()=>{
   setLoading(true);
   try {setPhotos(await listProductPhotos(row));}

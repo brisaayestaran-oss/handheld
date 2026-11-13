@@ -146,7 +146,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
                         src={
                           product.realPhotos?.[0] || (product.brand === 'Lenovo'
                             ? '/assets/consoles/lenovo-legion-go/legion-go-official-main.png'
-                            : product.id === 'steam-deck-lcd-refurbished' ? '/Steam%20deck/steamdeck_renderings/rendering07.webp' : '/Steam%20deck/steam_deck_oled/press_front_home.webp')
+                            : !/oled/i.test(product.model) ? '/Steam%20deck/steamdeck_renderings/rendering07.webp' : '/Steam%20deck/steam_deck_oled/press_front_home.webp')
                         }
                         alt={`${product.name} · ${product.realPhotos?.length ? 'foto real de la unidad' : 'imagen ilustrativa del modelo'}`}
                         className="w-full max-h-[170px] object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.95)] contrast-[1.03]"
