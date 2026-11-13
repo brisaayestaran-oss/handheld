@@ -74,15 +74,13 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
     </div>
 
     {/* Video de portada: movimiento sutil con imagen de respaldo. */}
-    {showVideo && <div className="relative mx-auto mt-4 w-full max-w-[1000px] px-3 sm:mt-2 lg:mt-0" aria-label="Presentación de consola Steam Deck">
+    {showVideo && <div className="relative mx-auto mt-0 w-full max-w-[1600px] overflow-hidden sm:-mt-2 lg:-mt-5" aria-label="Presentación de consola Steam Deck">
       <video ref={videoRef} muted loop playsInline preload="none" poster="/Steam%20deck/steam_deck_oled/press_front_home.webp" onError={() => setShowVideo(false)}
         aria-label="Video de presentación Steam Deck"
-        className="block aspect-[16/7] sm:aspect-[16/6] w-full object-contain"
+        className="block aspect-[16/8] sm:aspect-[16/7] w-full object-cover object-center"
         style={{
-          maskImage: "linear-gradient(to right, transparent 0%, black 11%, black 89%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 13%, black 87%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 11%, black 89%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 13%, black 87%, transparent 100%)",
-          maskComposite: "intersect",
-          WebkitMaskComposite: "source-in",
+          maskImage: "radial-gradient(ellipse 72% 72% at 50% 48%, #000 48%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(ellipse 72% 72% at 50% 48%, #000 48%, transparent 100%)",
         }}>
       </video>
     </div>}
