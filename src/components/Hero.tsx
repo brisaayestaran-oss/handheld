@@ -94,6 +94,9 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[43%] bg-gradient-to-b from-[#050A15] via-[#050A15]/85 to-transparent" />
       {/* Fundir el borde inferior del video con el fondo antes del catálogo. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[26%] bg-gradient-to-t from-[#050A15] via-[#050A15]/90 to-transparent" />
+      {/* Disolver ambos bordes laterales en el mismo fondo de la portada. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[22%] bg-gradient-to-r from-[#050A15] via-[#050A15]/80 to-transparent" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-20 w-[22%] bg-gradient-to-l from-[#050A15] via-[#050A15]/80 to-transparent" />
     </div>
     <div className="relative z-20 -mt-5 flex justify-center px-5 pb-6 sm:-mt-10 sm:pb-8">
       <button type="button" onClick={onExplore}
