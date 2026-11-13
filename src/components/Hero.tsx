@@ -90,6 +90,8 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
       ) : (
         <img src="/Steam%20deck/steam_deck_oled/press_front_home.webp" alt="Consola Steam Deck" className="relative z-10 mx-auto aspect-[16/9] max-h-[440px] w-full object-contain" decoding="async" loading="eager" fetchPriority="high" />
       )}
+      {/* Transición extendida: elimina el corte superior del video sin oscurecer la consola. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[43%] bg-gradient-to-b from-[#050A15] via-[#050A15]/85 to-transparent" />
     </div>
     <div className="relative z-20 -mt-5 flex justify-center px-5 pb-6 sm:-mt-10 sm:pb-8">
       <button type="button" onClick={onExplore}
