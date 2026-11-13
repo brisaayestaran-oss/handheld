@@ -16,7 +16,7 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 25);
+      setScrolled(window.scrollY > 12);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -35,8 +35,8 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-[#050507]/85 backdrop-blur-2xl border-b border-white/[0.08] py-4 shadow-[0_12px_40px_rgba(0,0,0,0.85)]'
-            : 'bg-gradient-to-b from-[#050507]/90 via-[#050507]/40 to-transparent py-5 sm:py-6'
+            ? 'bg-[#050507]/95 backdrop-blur-xl border-b border-white/[0.08] py-2 shadow-[0_8px_24px_rgba(0,0,0,0.45)]'
+            : 'bg-gradient-to-b from-[#050507]/95 via-[#050507]/75 to-transparent py-3 sm:py-4'
         }`}
       >
         {/* Subtle top ambient hairline sheen */}
@@ -109,7 +109,7 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#050507]/98 backdrop-blur-3xl lg:hidden pt-28 px-6 flex flex-col justify-between pb-12 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-40 bg-[#050507]/98 backdrop-blur-3xl lg:hidden pt-24 px-6 flex flex-col justify-between pb-8 overflow-y-auto animate-in fade-in duration-200">
           <div className="flex flex-col space-y-6">
             <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
               <HandheldLogo size="md" showWordmark={true} />

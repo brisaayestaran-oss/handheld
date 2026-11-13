@@ -44,13 +44,13 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
   };
 
   return (
-    <section id="catalogo" className="relative scroll-mt-24 py-16 sm:py-20 bg-transparent">
+    <section id="catalogo" className="relative scroll-mt-20 py-8 sm:py-12 bg-transparent">
       {/* Soft background glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-radial from-[#3678FF]/5 to-transparent blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6 mb-6 sm:mb-8">
           <div>
             <span className="text-xs font-mono-tech text-[#3678FF] uppercase tracking-widest block mb-2">
               CONSOLAS PORTÁTILES · CAJA ABIERTA Y USADAS
@@ -58,6 +58,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
             <h2 className="text-3xl sm:text-5xl font-black font-display text-white tracking-tight uppercase">
               ELEGÍ TU CONSOLA
             </h2>
+            <p className="mt-3 text-sm text-[#AFC0DC]">{loading ? 'Actualizando disponibilidad…' : loadError ? 'Disponibilidad no confirmada' : `${products.length} ${products.length === 1 ? 'consola disponible' : 'consolas disponibles'} para consultar`}</p>
 
           </div>
           <div className="flex items-center gap-2 text-xs font-mono-tech text-[#C8CAD1]/60">
@@ -67,9 +68,9 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
         </div>
 
         {/* Filter & Search Bar */}
-        <div className="p-4 rounded-2xl bg-[#101115] border border-white/[0.08] mb-12 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+        <div className="p-3 sm:p-4 rounded-2xl bg-[#101115] border border-white/[0.08] mb-6 sm:mb-8 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
           {/* Brand Tabs (Segmented interactive buttons) */}
-          <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#050507] rounded-xl border border-white/[0.06]">
+          <div className="flex items-center gap-1.5 p-1 bg-[#050507] rounded-xl border border-white/[0.06] overflow-x-auto">
             {brands.map((brand) => (
               <button
                 key={brand}
@@ -117,7 +118,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
             </button>}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
             {filteredProducts.map((product) => {
               const activeVariantIdx = selectedVariantByProduct[product.id] ?? 0;
               const currentVariant = product.variants[activeVariantIdx] || product.variants[0];
@@ -130,7 +131,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
                   className="group relative flex flex-col justify-between rounded-3xl bg-[#101115] border border-white/[0.08] hover:border-white/[0.22] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)] overflow-hidden cursor-pointer"
                 >
                   {/* Card Header & Visual Container */}
-                  <div className="p-6 pb-2">
+                  <div className="p-4 sm:p-5 pb-2">
                     {/* Top unboxed metadata */}
                     <div className="flex items-center justify-between text-xs text-[#C8CAD1]/70 mb-4">
                       <div className="flex items-center gap-2">
@@ -143,7 +144,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
                     </div>
 
                     {/* Real Console Photography Display */}
-                    <div className="py-6 px-2 flex items-center justify-center min-h-[200px] transition-transform duration-500 group-hover:scale-105">
+                    <div className="py-3 px-2 flex items-center justify-center min-h-[150px] sm:min-h-[180px] transition-transform duration-300 group-hover:scale-[1.03]">
                       <img
                         src={
                           product.realPhotos?.[0] || (product.brand === 'Lenovo'
@@ -151,14 +152,14 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
                             : !/oled/i.test(product.model) ? '/Steam%20deck/steamdeck_renderings/rendering07.webp' : '/Steam%20deck/steam_deck_oled/press_front_home.webp')
                         }
                         alt={`${product.name} · ${product.realPhotos?.length ? 'foto real de la unidad' : 'imagen ilustrativa del modelo'}`}
-                        className="w-full max-h-[170px] object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.95)] contrast-[1.03]"
-                        loading="lazy" decoding="async" referrerPolicy="no-referrer"
+                        className="w-full max-h-[170px] object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.75)] contrast-[1.03]"
+                        loading="lazy" decoding="async" width="400" height="220" referrerPolicy="no-referrer"
                       />
                     </div>
                   </div>
 
                   {/* Card Content & Variant Selector */}
-                  <div className="p-6 pt-0 flex-1 flex flex-col justify-between">
+                  <div className="p-4 sm:p-5 pt-0 flex-1 flex flex-col justify-between">
                     <div>
                       <h3 className="text-xl font-black font-display text-white group-hover:text-[#3678FF] transition-colors">
                         {product.name}
@@ -194,7 +195,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
                     </div>
 
                     {/* Pricing & Footer Actions */}
-                    <div className="mt-6 pt-4 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-3">
+                    <div className="mt-4 pt-4 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <div className="text-[10px] font-mono-tech text-[#C8CAD1]/50 uppercase tracking-wider">
                           Precio directo · sin envío
@@ -212,7 +213,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
                           rel="noopener noreferrer"
                           onClick={(e) => { e.stopPropagation(); recordInterest('purchase_click', { id: currentVariant.sku, name: product.name, capacity: currentVariant.capacity }, 'whatsapp'); }}
                           title="Consultar disponibilidad por WhatsApp" aria-label={`Consultar por WhatsApp sobre ${product.name}, ${currentVariant.capacity}`}
-                          className="p-2.5 rounded-xl bg-white/[0.04] hover:bg-[#3678FF] hover:text-white text-[#3678FF] border border-white/[0.08] transition-colors"
+                          className="min-h-11 min-w-11 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-[#3678FF] hover:text-white text-[#3678FF] border border-white/[0.08] transition-colors"
                         >
                           <MessageCircle className="w-4 h-4" />
                         </a>
@@ -220,7 +221,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
                         {/* View console CTA */}
                         <button
                           onClick={() => onSelectProduct(product, activeVariantIdx)}
-                          className="px-3.5 py-2.5 text-xs font-bold font-display uppercase tracking-wider text-white bg-[#20232B] group-hover:bg-[#3678FF] rounded-xl transition-all flex items-center gap-1.5 shrink-0"
+                          className="min-h-11 px-4 py-2.5 text-xs font-bold font-display uppercase tracking-wider text-white bg-[#3678FF] hover:bg-[#2563EB] rounded-xl transition-all flex items-center gap-1.5 shrink-0"
                         >
                           <span>VER CONSOLA</span>
                           <ArrowUpRight className="w-3.5 h-3.5" />
