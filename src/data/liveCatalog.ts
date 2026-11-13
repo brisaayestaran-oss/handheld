@@ -70,16 +70,18 @@ function toProduct(row: LiveSheetRow, index: number): Product {
   };
 }
 
+// Las fotografías se consultan después del stock, sin demorar las tarjetas.
+export async function fetchCatalogPhotos(): Promise<Record<number, string[]>> {
+  const photos = await import('../lib/productPhotos');
+  return photos.getProductPhotos();
+}
+
 export async function fetchCatalogFromSheet(): Promise<SheetStockState> {
-  const response = await fetch('/api/stock?t=' + Date.now(), { cache: 'no-store' });
+  const response = await fetch('/api/stock?t=' + Date.now(), { cache: 'no-store', signal: AbortSignal.timeout(15000) });
   if (!response.ok) throw new Error('No pudimos leer el stock de Google Sheets');
   const data = await response.json() as { rows: LiveSheetRow[]; fetchedAt: string };
   if (!Array.isArray(data.rows)) throw new Error('Respuesta inválida del inventario');
   const available = data.rows.filter(r => normalize(r.status) === 'en stock');
-  const photos = await import('../lib/productPhotos').then(m => m.getProductPhotos()).catch(() => ({} as Record<number, string[]>));
-  const products = available.map((r, index) => {
-    const product = toProduct(r, index);
-    return { ...product, realPhotos: photos[product.photoStorageRow!] ?? [] };
-  });
+  const products = available.map((r, index) => ({ ...toProduct(r, index), realPhotos: [] as string[] }));
   return { products, soldCount: data.rows.length - available.length, fetchedAt: data.fetchedAt };
 }

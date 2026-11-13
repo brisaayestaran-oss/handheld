@@ -7,11 +7,13 @@ import { LegionGoVisual } from './visuals/LegionGoVisual';
 import { Search, MessageCircle, ArrowUpRight, Check, SlidersHorizontal, Info } from 'lucide-react';
 
 interface Props {
+  loading?: boolean;
+  loadError?: string;
   products: Product[];
   onSelectProduct: (product: Product, variantIndex?: number) => void;
 }
 
-export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) => {
+export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loading = false, loadError = '' }) => {
   const [selectedBrand, setSelectedBrand] = useState<string>('Todas');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedVariantByProduct, setSelectedVariantByProduct] = useState<Record<string, number>>({});
@@ -102,9 +104,9 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
         {filteredProducts.length === 0 ? (
           <div className="py-24 text-center border border-white/[0.06] rounded-3xl bg-[#101115]/50">
             <SlidersHorizontal className="w-10 h-10 text-[#C8CAD1]/30 mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-white font-display">No encontramos consolas con esos filtros</h3>
-            <p className="mt-1 text-xs text-[#C8CAD1]/60">Probá restablecer la búsqueda o consultar directamente por WhatsApp.</p>
-            <button
+            <h3 className="text-lg font-bold text-white font-display">{loading ? 'Cargando consolas disponibles…' : loadError ? 'No pudimos actualizar el catálogo' : products.length === 0 ? 'No hay consolas disponibles en este momento' : 'No encontramos consolas con esos filtros'}</h3>
+            <p className="mt-1 text-xs text-[#C8CAD1]/60">{loading ? 'Estamos consultando el inventario actualizado.' : loadError ? 'La conexión con el inventario falló. Podés consultar por WhatsApp.' : products.length === 0 ? 'Consultá por WhatsApp para conocer próximas unidades.' : 'Probá restablecer la búsqueda o consultar directamente por WhatsApp.'}</p>
+            {!loading && !loadError && products.length > 0 && <button
               onClick={() => {
                 setSelectedBrand('Todas');
                 setSearchQuery('');
@@ -112,7 +114,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct }) =
               className="mt-6 px-5 py-2.5 text-xs font-bold text-white bg-[#20232B] hover:bg-white/10 rounded-xl transition-colors border border-white/10"
             >
               Restablecer Filtros
-            </button>
+            </button>}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">

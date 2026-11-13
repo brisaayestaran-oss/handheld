@@ -6,7 +6,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { PRODUCTS } from './data/products';
 import { STOCK_CATALOG } from './data/stockCatalog';
-import { fetchCatalogFromSheet } from './data/liveCatalog';
+import { fetchCatalogFromSheet, fetchCatalogPhotos } from './data/liveCatalog';
 import { recordInterest } from './services/interestAnalytics';
 import { Product } from './types/catalog';
 import { Navbar } from './components/Navbar';
@@ -30,6 +30,7 @@ export default function App() {
   const [stockFetchedAt, setStockFetchedAt] = useState('');
   const [soldCount, setSoldCount] = useState(0);
   const [stockWarning, setStockWarning] = useState('');
+  const [stockLoading, setStockLoading] = useState(true);
 
   useEffect(() => {
     let active = true;
@@ -41,12 +42,22 @@ export default function App() {
         setSoldCount(result.soldCount);
         setStockFetchedAt(result.fetchedAt);
         setStockWarning('');
+        setStockLoading(false);
+        // Supabase es opcional para la ficha: la galería se agrega cuando responde.
+        void fetchCatalogPhotos().then(photos => {
+          if (!active) return;
+          setProducts(current => current.map(product => ({
+            ...product,
+            realPhotos: photos[product.photoStorageRow ?? 0] ?? []
+          })));
+        }).catch(error => console.warn('Fotos del catálogo:', error));
       } catch (error) {
         if (active) {
           setProducts([]);
           setSoldCount(0);
           setStockFetchedAt('');
           setStockWarning('Inventario temporalmente no disponible. Consultá stock y precio por WhatsApp.');
+          setStockLoading(false);
         }
         console.warn('Stock de Google Sheets:', error);
       }
@@ -180,6 +191,8 @@ export default function App() {
 
         {/* El catálogo es lo primero que aparece después de la portada. */}
         <CatalogSection
+          loading={stockLoading}
+          loadError={stockWarning}
           products={products}
           onSelectProduct={handleOpenProduct}
         />
