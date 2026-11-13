@@ -61,7 +61,7 @@ export const ProductDetailModal: React.FC<Props> = ({
                 <img
                   src={
                     product.realPhotos?.[selectedGalleryIdx] || (product.brand === 'Lenovo'
-                      ? '/assets/consoles/lenovo-legion-go/legion-go-official-main.png'
+                      ? '/optimized/legion-go-official-main.webp'
                       : !/oled/i.test(product.model) ? '/Steam%20deck/steamdeck_renderings/rendering07.webp' : '/Steam%20deck/steam_deck_oled/press_front_home.webp')
                   }
                   alt={`${product.name} · ${product.realPhotos?.length ? 'foto real de la unidad' : 'imagen ilustrativa'}`}

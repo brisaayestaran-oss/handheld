@@ -8,10 +8,19 @@ export const SteamDeckShowcaseSection: React.FC = () => {
     const video = travelVideoRef.current;
     if (!video) return;
     let visible = false;
+    let sourceLoaded = false;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const sync = () => {
       if (visible && document.visibilityState === 'visible' && !reducedMotion.matches) {
-        void video.play().catch(() => {});
+        if (!sourceLoaded && !(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) {
+          sourceLoaded = true;
+          const source = document.createElement('source');
+          source.src = '/Steam%20deck/lifestyle_airplane.webm';
+          source.type = 'video/webm';
+          video.appendChild(source);
+          video.load();
+        }
+        if (sourceLoaded) void video.play().catch(() => {});
       } else {
         video.pause();
       }
@@ -43,7 +52,7 @@ export const SteamDeckShowcaseSection: React.FC = () => {
 
       <div className="relative mx-auto mt-9 max-w-[1520px] px-5 sm:mt-12 sm:px-8">
         <figure className="relative aspect-[16/10] overflow-hidden rounded-[1.5rem] bg-[#141B22] sm:aspect-[16/9]">
-          <img src="/Steam%20deck/lifestyle_camping.jpg" loading="lazy" decoding="async"
+          <img src="/optimized/lifestyle_camping.webp" loading="lazy" decoding="async"
             alt="Dos personas jugando con una Steam Deck al aire libre"
             className="absolute inset-0 h-full w-full object-contain object-center" />
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#060A13]/75 via-transparent to-[#05070D]/10" />
@@ -66,10 +75,9 @@ export const SteamDeckShowcaseSection: React.FC = () => {
           </a>
         </div>
         <div className="relative h-[260px] overflow-hidden rounded-[1.5rem] bg-[#101726] sm:h-[420px] lg:h-[510px]">
-          <video ref={travelVideoRef} autoPlay muted loop playsInline preload="metadata" disablePictureInPicture
+          <video ref={travelVideoRef} muted loop playsInline preload="none" disablePictureInPicture
             aria-label="Persona jugando en una consola portátil durante un viaje en avión"
             className="absolute inset-0 h-full w-full object-cover object-center">
-            <source src="/Steam%20deck/lifestyle_airplane.webm" type="video/webm" />
           </video>
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#080D18]/55 via-transparent to-transparent" />
           <span className="absolute bottom-5 left-5 text-[11px] font-bold uppercase tracking-[.18em] text-white/90 sm:bottom-8 sm:left-8">LLEVÁ EL JUEGO CON VOS</span>
@@ -79,7 +87,7 @@ export const SteamDeckShowcaseSection: React.FC = () => {
       <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-5 pb-16 sm:px-10 sm:pb-24 lg:grid-cols-[1.12fr_.88fr] lg:gap-16">
         <div className="relative order-2 flex min-h-[270px] items-center justify-center overflow-hidden rounded-[1.5rem] bg-[#101726] sm:min-h-[410px] lg:order-1 lg:min-h-[500px]">
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(53,100,210,.20),transparent_75%)]" />
-          <img src="/assets/consoles/lenovo-legion-go/legion-go-detached.png" loading="lazy" decoding="async"
+          <img src="/optimized/legion-go-detached.webp" loading="lazy" decoding="async"
             alt="Lenovo Legion Go con controles desmontables"
             className="relative max-h-[250px] w-full object-contain drop-shadow-[0_35px_60px_rgba(0,0,0,.6)] sm:max-h-[380px] lg:max-h-[450px]" />
         </div>
@@ -110,12 +118,12 @@ export const SteamDeckShowcaseSection: React.FC = () => {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <figure className="overflow-hidden rounded-[1.25rem] bg-[#121722]">
-            <img src="/Steam%20deck/itsapc.jpg" loading="lazy" decoding="async" alt="Steam Deck conectada a un escritorio"
+            <img src="/optimized/itsapc.webp" loading="lazy" decoding="async" alt="Steam Deck conectada a un escritorio"
               className="aspect-[16/10] w-full object-cover" />
             <figcaption className="px-5 py-3 text-sm text-white/80">Steam Deck: una consola que también puede usarse en tu escritorio.</figcaption>
           </figure>
           <figure className="overflow-hidden rounded-[1.25rem] bg-[#121722]">
-            <img src="/Steam%20deck/dock_top_feature_english.jpg" loading="lazy" decoding="async" alt="Configuración de Steam Deck con dock"
+            <img src="/optimized/dock_top_feature_english.webp" loading="lazy" decoding="async" alt="Configuración de Steam Deck con dock"
               className="aspect-[16/10] w-full object-cover" />
             <figcaption className="px-5 py-3 text-sm text-white/80">Con un dock compatible, ampliá las opciones para jugar.</figcaption>
           </figure>

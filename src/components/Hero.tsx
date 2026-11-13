@@ -6,9 +6,9 @@ export interface HeroProps { onExplore: () => void; }
 
 export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
-  const [showVideo, setShowVideo] = React.useState(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [showVideo, setShowVideo] = React.useState(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches && !(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
   React.useEffect(() => {
-    const syncSize = () => setShowVideo(!window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const syncSize = () => setShowVideo(!window.matchMedia('(prefers-reduced-motion: reduce)').matches && !(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
     window.addEventListener('resize', syncSize);
     return () => window.removeEventListener('resize', syncSize);
   }, []);
@@ -16,7 +16,16 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
     const video = videoRef.current;
     if (!video || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let inViewport = false;
+    let sourceLoaded = false;
     const syncPlayback = () => {
+      if (inViewport && !sourceLoaded) {
+        sourceLoaded = true;
+        const source = document.createElement('source');
+        source.src = '/Steam%20deck/overview_oled%20(1).webm';
+        source.type = 'video/webm';
+        video.appendChild(source);
+        video.load();
+      }
       if (inViewport && document.visibilityState === 'visible') {
         void video.play().catch(() => {});
       } else {
@@ -66,7 +75,7 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
 
     {/* Video de portada: movimiento sutil con imagen de respaldo. */}
     {showVideo && <div className="relative mx-auto mt-5 w-full max-w-[1640px] px-0 sm:mt-0 sm:-mt-2 lg:-mt-5" aria-label="Presentación de consola Steam Deck">
-      <video ref={videoRef} autoPlay muted loop playsInline preload="metadata" onError={() => setShowVideo(false)}
+      <video ref={videoRef} muted loop playsInline preload="none" poster="/Steam%20deck/steam_deck_oled/press_front_home.webp" onError={() => setShowVideo(false)}
         aria-label="Video de presentación Steam Deck"
         className="block aspect-video w-full object-contain"
         style={{
@@ -75,11 +84,10 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
           maskComposite: "intersect",
           WebkitMaskComposite: "source-in",
         }}>
-        <source src="/Steam%20deck/overview_oled%20(1).webm" type="video/webm" />
       </video>
     </div>}
 
-    <div className={`mx-auto mt-7 w-full max-w-md justify-center px-6 ${showVideo ? "hidden" : "flex"}`}><img src="/Steam%20deck/steam_deck_oled/press_front_home.webp" alt="Consola Steam Deck" className="max-h-52 w-full object-contain" decoding="async" /></div>
+    <div className={`mx-auto mt-7 w-full max-w-md justify-center px-6 ${showVideo ? "hidden" : "flex"}`}><img src="/Steam%20deck/steam_deck_oled/press_front_home.webp" alt="Consola Steam Deck" className="max-h-52 w-full object-contain" decoding="async" loading="eager" fetchPriority="high" /></div>
     <div className="relative z-10 flex justify-center px-5 pb-8 pt-5 sm:pb-14">
       <button type="button" onClick={onExplore}
         className="inline-flex items-center gap-3 rounded-full border border-[#A1B5ED]/35 bg-[#070C18]/85 px-5 py-3 text-[11px] font-bold uppercase tracking-[.13em] text-white transition-colors hover:border-[#91B2FF]">
