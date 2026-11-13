@@ -45,8 +45,9 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
     };
   }, [showVideo]);
   return (
-  <section id="inicio" className="relative isolate min-h-[690px] overflow-hidden bg-[#050A15] text-white scroll-mt-20 sm:min-h-[760px] lg:min-h-[min(860px,100svh)]">
-    {/* Video a pantalla completa, con la consola en la zona inferior y el texto protegido arriba. */}
+  <section id="inicio" className="relative isolate overflow-hidden bg-[#050A15] text-white scroll-mt-20">
+    {/* Dos zonas independientes: el movimiento del video nunca invade el texto. */}
+    <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-20 h-72 bg-[radial-gradient(ellipse_at_center,rgba(43,83,171,0.14),transparent_72%)]" />
     <div className="relative z-20 mx-auto flex max-w-7xl flex-col items-center px-5 pt-24 text-center sm:pt-28 lg:pt-28">
       <p className="mb-4 font-mono-tech text-[10px] font-semibold uppercase tracking-[.24em] text-[#B4C9EF] sm:text-xs">
         <span className="inline-flex items-center gap-3 rounded-full border border-[#8AC7FF]/30 bg-[#74ACDF]/[.08] px-4 py-2 text-xs font-bold tracking-[.12em] text-[#D3E9FF]">
@@ -73,23 +74,24 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
       </div>
     </div>
 
-    {/* Video de portada: movimiento sutil con imagen de respaldo. */}
-    {showVideo && <div className="pointer-events-none absolute inset-0 z-0 flex items-end justify-center overflow-hidden" aria-label="Presentación de consola Steam Deck">
+    {/* Escenario propio, sin marcos ni posibilidad de superponerse al titular. */}
+    <div className="relative isolate mx-auto mt-1 w-full max-w-[1500px] overflow-hidden px-2 sm:mt-0 sm:px-5" aria-label="Presentación de consola Steam Deck">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-[12%] top-[25%] h-[65%] rounded-full bg-[#13244A]/35 blur-[90px]" />
+      {showVideo ? (
       <video ref={videoRef} muted loop playsInline preload="none" poster="/Steam%20deck/steam_deck_oled/press_front_home.webp" onError={() => setShowVideo(false)}
         aria-label="Video de presentación Steam Deck"
-        className="block h-[60%] w-full max-w-[1750px] object-contain object-bottom sm:h-[70%] lg:h-[83%]"
+        className="relative z-10 block aspect-[16/9] w-full object-contain"
         style={{
-          maskImage: "linear-gradient(to bottom, transparent 0%, black 14%, black 76%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 14%, black 76%, transparent 100%)",
+          maskImage: "radial-gradient(ellipse 54% 70% at 50% 51%, black 45%, transparent 98%)",
+          WebkitMaskImage: "radial-gradient(ellipse 54% 70% at 50% 51%, black 45%, transparent 98%)",
+          mixBlendMode: 'screen',
         }}>
       </video>
-    </div>}
-
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-[#050A15] via-[#050A15]/90 to-transparent [background-size:100%_60%] bg-no-repeat" />
-    <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-32 bg-gradient-to-t from-[#050A15] to-transparent" />
-
-    {!showVideo && <div className="pointer-events-none absolute inset-x-0 bottom-12 z-0 flex justify-center px-6"><img src="/Steam%20deck/steam_deck_oled/press_front_home.webp" alt="Consola Steam Deck" className="max-h-[330px] w-full object-contain sm:max-h-[440px]" decoding="async" loading="eager" fetchPriority="high" /></div>}
-    <div className="absolute inset-x-0 bottom-4 z-20 flex justify-center px-5 sm:bottom-6">
+      ) : (
+        <img src="/Steam%20deck/steam_deck_oled/press_front_home.webp" alt="Consola Steam Deck" className="relative z-10 mx-auto aspect-[16/9] max-h-[440px] w-full object-contain" decoding="async" loading="eager" fetchPriority="high" />
+      )}
+    </div>
+    <div className="relative z-20 -mt-5 flex justify-center px-5 pb-6 sm:-mt-10 sm:pb-8">
       <button type="button" onClick={onExplore}
         className="inline-flex items-center gap-3 rounded-full border border-[#A1B5ED]/35 bg-[#070C18]/85 px-5 py-3 text-[11px] font-bold uppercase tracking-[.13em] text-white transition-colors hover:border-[#91B2FF]">
         DESLIZÁ PARA EXPLORAR <ChevronDown size={16} />
