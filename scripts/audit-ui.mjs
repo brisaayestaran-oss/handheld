@@ -70,6 +70,15 @@ for (const [label,width,height] of [['mobile-360',360,780],['mobile-390',390,844
       await page.locator('#nosotros').screenshot({path:join(folder,'about-mobile.png')});
       await page.locator('section[aria-label="Más posibilidades con tu consola"]').screenshot({path:join(folder,'features-mobile.png')});
     }
+    if (width === 1440) {
+      const features = page.locator('section[aria-label="Más posibilidades con tu consola"]');
+      await features.scrollIntoViewIfNeeded();
+      await features.locator('img').evaluateAll(async images => { await Promise.all(images.map(img => img.decode().catch(() => {}))); });
+      await features.screenshot({path:join(folder,'features-desktop.png')});
+      const about = page.locator('#nosotros');
+      await about.scrollIntoViewIfNeeded();
+      await about.screenshot({path:join(folder,'about-desktop.png')});
+    }
     const screenshot=join(folder,label+'.png');
     await page.screenshot({path:screenshot,fullPage:false});
     if (width === 390) {

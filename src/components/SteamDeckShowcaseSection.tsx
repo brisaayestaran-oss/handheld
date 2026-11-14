@@ -1,18 +1,20 @@
 import React, { useEffect, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 
+/** Una escena editorial completa, sin otra tarjeta de texto + imagen. */
 export const SteamDeckShowcaseSection: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    let loaded = false;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting || document.visibilityState !== 'visible' || window.matchMedia('(prefers-reduced-motion: reduce)').matches || (navigator as Navigator & {connection?: {saveData?:boolean}}).connection?.saveData) {
-        video.pause(); return;
-      }
-      if (!loaded) {
-        loaded = true;
+    let sourceLoaded = false;
+    let visible = false;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => {
+      const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+      if (!visible || document.hidden || reducedMotion.matches || saveData) { video.pause(); return; }
+      if (!sourceLoaded) {
+        sourceLoaded = true;
         const source = document.createElement('source');
         source.src = '/Steam%20deck/lifestyle_airplane.webm';
         source.type = 'video/webm';
@@ -20,25 +22,28 @@ export const SteamDeckShowcaseSection: React.FC = () => {
         video.load();
       }
       void video.play().catch(() => {});
-    }, {rootMargin:'80px 0px',threshold:0.15});
+    };
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }, { threshold: .12, rootMargin: '80px 0px' });
     observer.observe(video);
-    const onHidden = () => { if (document.hidden) video.pause(); };
-    document.addEventListener('visibilitychange',onHidden);
-    return () => {observer.disconnect();document.removeEventListener('visibilitychange',onHidden);video.pause();};
-  },[]);
+    document.addEventListener('visibilitychange', sync);
+    reducedMotion.addEventListener('change', sync);
+    return () => { observer.disconnect(); document.removeEventListener('visibilitychange', sync); reducedMotion.removeEventListener('change', sync); video.pause(); };
+  }, []);
   return (
-    <section aria-label="Experiencia de juego portátil" className="px-4 py-8 sm:px-8 sm:py-12">
-      <div className="mx-auto grid max-w-6xl items-center gap-6 overflow-hidden rounded-[1.75rem] border border-white/[.08] bg-[#0E1728]/75 p-4 sm:p-7 lg:grid-cols-[.85fr_1.15fr]">
-        <div className="p-2 sm:p-5">
-          <p className="text-[11px] font-bold uppercase tracking-[.24em] text-[#92B4FF]">LA EXPERIENCIA HANDHELD</p>
-          <h2 className="mt-4 font-display text-3xl font-black uppercase leading-tight text-white sm:text-5xl">Jugá donde quieras.</h2>
-          <p className="mt-4 max-w-md text-sm leading-relaxed text-[#B7C7DF]">Tus juegos favoritos, estés donde estés. Elegí una consola según la pantalla, el sistema y los juegos que usás.</p>
-          <a href="#catalogo" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 px-5 text-sm font-semibold text-white hover:bg-white/10">Ver consolas disponibles <ArrowUpRight size={17}/></a>
-        </div>
-        <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-[#080D19]">
-          <img src="/optimized/lifestyle_camping.webp" loading="lazy" decoding="async" width="1200" height="675" alt="Personas jugando con una consola portátil" className="absolute inset-0 h-full w-full object-cover"/>
-          <video ref={videoRef} muted loop playsInline preload="none" disablePictureInPicture aria-label="Video de una consola portátil en un viaje" className="absolute inset-0 h-full w-full object-cover" />
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#080D19]/25 to-transparent" />
+    <section aria-label="Experiencia de juego portátil" className="relative px-0 py-7 sm:px-8 sm:py-14">
+      <div className="relative mx-auto min-h-[510px] max-w-[1440px] overflow-hidden bg-[#0B1222] sm:min-h-[540px] lg:min-h-[630px]">
+        <img src="/optimized/lifestyle_camping.webp" loading="lazy" decoding="async" width="1200" height="675"
+          alt="Una consola portátil en un momento de juego fuera de casa"
+          className="absolute inset-0 h-full w-full object-cover object-center" />
+        <video ref={videoRef} muted loop playsInline preload="none" disablePictureInPicture
+          aria-label="Video de gaming portátil durante un viaje"
+          className="absolute inset-0 h-full w-full object-cover object-center" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050A15]/95 via-[#050A15]/45 to-[#050A15]/5 lg:bg-gradient-to-r lg:from-[#050A15]/95 lg:via-[#050A15]/65 lg:to-[#050A15]/10" />
+        <div className="relative z-10 flex min-h-[510px] flex-col justify-end px-6 pb-11 pt-24 sm:min-h-[540px] sm:px-12 sm:pb-16 lg:min-h-[630px] lg:justify-center lg:px-20">
+          <p className="text-xs font-bold uppercase tracking-[.25em] text-[#A6C5FF]">LA EXPERIENCIA HANDHELD</p>
+          <h2 className="mt-4 max-w-2xl font-display text-[clamp(3rem,6vw,6.6rem)] font-black uppercase leading-[.98] tracking-tight text-white">Jugá donde <span className="text-[#95B9FF]">quieras.</span></h2>
+          <p className="mt-5 max-w-md text-base leading-relaxed text-[#E2EAF7]">Tus juegos favoritos, tu lugar favorito. Una consola que te acompaña a donde vayas.</p>
+          <a href="#catalogo" className="mt-7 inline-flex min-h-12 w-fit items-center gap-2 border-b border-[#B4CFFF] pb-1 text-sm font-bold text-white hover:text-[#A5C6FF]">Encontrá tu consola <ArrowUpRight size={18}/></a>
         </div>
       </div>
     </section>

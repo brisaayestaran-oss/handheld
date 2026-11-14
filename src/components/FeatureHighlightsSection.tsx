@@ -1,29 +1,37 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 
+/** Bloques editoriales: imagen protagonista y texto sin tarjetas repetidas. */
 export const FeatureHighlightsSection: React.FC = () => (
-  <section aria-label="Más posibilidades con tu consola" className="relative mx-auto max-w-7xl px-4 py-8 sm:px-8 sm:py-12">
-    <div className="grid items-center gap-5 overflow-hidden rounded-[1.75rem] border border-white/[.09] bg-[#101B2D]/75 p-4 sm:p-7 lg:grid-cols-2 lg:gap-10">
-      <div className="relative flex min-h-[230px] items-center justify-center overflow-hidden rounded-2xl bg-[radial-gradient(ellipse_at_center,rgba(54,92,190,.22),transparent_70%)] sm:min-h-[340px]">
-        <img src="/optimized/legion-go-detached.webp" loading="lazy" decoding="async" width="1050" height="680" alt="Lenovo Legion Go con sus controles desmontados" className="max-h-[310px] w-full object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,.5)]"/>
+  <section aria-label="Más posibilidades con tu consola" className="relative isolate overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_75%_25%,rgba(40,70,145,.13),transparent_55%)]" aria-hidden="true" />
+    <div className="relative mx-auto max-w-[1380px] px-5 sm:px-8 lg:px-12">
+      <div className="grid items-center gap-7 border-t border-white/[.07] py-14 sm:py-20 lg:grid-cols-[1.1fr_.9fr] lg:gap-16 lg:py-24">
+        <div className="relative min-w-0 overflow-hidden">
+          <div aria-hidden="true" className="pointer-events-none absolute inset-[15%] rounded-full bg-[#3569CC]/15 blur-[90px]"/>
+          <img src="/optimized/legion-go-detached.webp" width="1050" height="680" loading="lazy" decoding="async"
+            alt="Lenovo Legion Go con controles desmontables"
+            className="relative mx-auto aspect-[16/10] max-h-[520px] w-full object-contain drop-shadow-[0_28px_50px_rgba(0,0,0,.5)]"/>
+        </div>
+        <div className="max-w-xl">
+          <p className="text-xs font-bold uppercase tracking-[.2em] text-[#88AEFF]">LENOVO LEGION GO</p>
+          <h2 className="mt-4 font-display text-[clamp(2.5rem,5vw,5.6rem)] font-black uppercase leading-[.99] tracking-tight text-white">Más pantalla.<span className="block text-[#86AEFF]">Más control.</span></h2>
+          <p className="mt-5 max-w-lg text-base leading-relaxed text-[#B9C9E0]">Pantalla de 8,8 pulgadas, hasta 144 Hz y controles desmontables para jugar a tu manera.</p>
+          <a href="#catalogo" className="mt-7 inline-flex min-h-12 items-center gap-2 border-b border-[#83ABFF] pb-1 text-sm font-bold text-white transition-colors hover:text-[#8EBCFF]">Explorar Legion Go <ArrowUpRight size={18}/></a>
+        </div>
       </div>
-      <div className="px-2 py-3 sm:px-5">
-        <p className="text-[11px] font-bold uppercase tracking-[.22em] text-[#91B5FF]">LENOVO LEGION GO</p>
-        <h2 className="mt-3 font-display text-3xl font-black uppercase leading-tight text-white sm:text-5xl">Más pantalla.<span className="block text-[#82ADFF]">Más control.</span></h2>
-        <p className="mt-4 max-w-md text-sm leading-relaxed text-[#B8C9E1]">Pantalla de 8,8 pulgadas, hasta 144 Hz y controles desmontables. Descubrí las distintas formas de jugar con Legion Go.</p>
-        <a href="#catalogo" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#3678FF] px-5 text-sm font-bold text-white hover:bg-[#2563EB]">Ver las Legion Go disponibles <ArrowUpRight size={17}/></a>
-      </div>
-    </div>
-    <div className="mt-5 grid items-center gap-5 overflow-hidden rounded-[1.75rem] border border-white/[.08] bg-[#101725]/80 p-4 sm:p-7 lg:grid-cols-2 lg:gap-10">
-      <div className="px-2 py-3 sm:px-5">
-        <p className="text-[11px] font-bold uppercase tracking-[.22em] text-[#91B5FF]">MÁS POSIBILIDADES</p>
-        <h2 className="mt-3 font-display text-3xl font-black uppercase leading-tight text-white sm:text-4xl">También en tu escritorio.</h2>
-        <p className="mt-4 max-w-md text-sm leading-relaxed text-[#B8C9E1]">Con un dock o adaptador compatible, podés conectar tu Steam Deck a un monitor, teclado y mouse. Los accesorios se consultan por unidad.</p>
-        <a href="#catalogo" className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/20 px-5 text-sm font-bold text-white hover:bg-white/10">Explorar Steam Deck <ArrowUpRight size={17}/></a>
-      </div>
-      <div className="grid grid-cols-2 gap-2">
-        <img src="/optimized/itsapc.webp" loading="lazy" decoding="async" width="1200" height="750" alt="Steam Deck como computadora de escritorio" className="aspect-[4/5] w-full rounded-2xl object-cover"/>
-        <img src="/optimized/dock_top_feature_english.webp" loading="lazy" decoding="async" width="1200" height="750" alt="Steam Deck conectada a un dock compatible" className="aspect-[4/5] w-full rounded-2xl object-cover"/>
+
+      <div className="grid items-center gap-8 border-t border-white/[.07] py-14 sm:py-20 lg:grid-cols-[.85fr_1.15fr] lg:gap-16 lg:py-24">
+        <div className="max-w-xl">
+          <p className="text-xs font-bold uppercase tracking-[.2em] text-[#88AEFF]">STEAM DECK · MÁS POSIBILIDADES</p>
+          <h2 className="mt-4 font-display text-[clamp(2.4rem,4.5vw,5rem)] font-black uppercase leading-[1] tracking-tight text-white">También en tu <span className="text-[#86AEFF]">escritorio.</span></h2>
+          <p className="mt-5 max-w-md text-base leading-relaxed text-[#B9C9E0]">Con un dock o adaptador compatible, conectá un monitor, teclado y mouse. Consultá qué accesorios incluye cada unidad.</p>
+          <a href="#catalogo" className="mt-7 inline-flex min-h-12 items-center gap-2 border-b border-[#83ABFF] pb-1 text-sm font-bold text-white transition-colors hover:text-[#8EBCFF]">Descubrir Steam Deck <ArrowUpRight size={18}/></a>
+        </div>
+        <div className="relative grid min-w-0 grid-cols-[1.2fr_.8fr] items-center gap-3 sm:gap-5">
+          <img src="/optimized/itsapc.webp" width="1200" height="750" loading="lazy" decoding="async" alt="Steam Deck conectada a un monitor con teclado y mouse" className="aspect-[4/3] w-full rounded-2xl object-contain bg-[#111725]"/>
+          <img src="/optimized/dock_top_feature_english.webp" width="1200" height="750" loading="lazy" decoding="async" alt="Estación dock compatible con Steam Deck" className="aspect-[3/4] w-full rounded-2xl object-contain bg-[#111725]"/>
+        </div>
       </div>
     </div>
   </section>
