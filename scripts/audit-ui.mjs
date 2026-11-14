@@ -45,7 +45,7 @@ for (const [label,width,height] of [['mobile-360',360,780],['mobile-390',390,844
     assert(await cards.count()>=1,'No product cards');
     const pageContent = (await page.locator('main').innerText()).toLocaleLowerCase('es-AR');
     assert(pageContent.includes('más pantalla.'),'Missing Legion Go feature');
-    assert(pageContent.includes('también en tu escritorio.'),'Missing dock feature');
+    assert(!pageContent.includes('también en tu escritorio.'),'Desktop-use section should not be on the home page');
     assert(pageContent.includes('desde argentina,'),'Missing Argentina story');
     assert(!pageContent.includes('conocé tu consola antes de decidir.'),'Duplicated trust section');
     assert((await page.locator('#nosotros').innerText()).includes('Instagram'),'Missing Instagram');
@@ -54,6 +54,7 @@ for (const [label,width,height] of [['mobile-360',360,780],['mobile-390',390,844
     await page.getByRole('button',{name:'Cerrar ficha'}).waitFor({timeout:8000});
     const detailBody = await page.locator('div.fixed.inset-0.z-50').innerText();
     assert(detailBody.includes('CONSULTAR POR WHATSAPP'),'Missing product consultation');
+    if (detailBody.includes('Steam Deck')) assert(detailBody.includes('También podés usarla en escritorio'),'Desktop-use info missing from Steam Deck detail');
     const gallery = page.getByRole('button',{name:/Ver foto real/});
     if ((await gallery.count()) > 1) {
       await gallery.nth(1).click();

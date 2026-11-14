@@ -102,6 +102,7 @@ export const ProductDetailModal: React.FC<Props> = ({
                   {product.subtitle}
                 </p>}
                 {product.packageDetails && <div className="mt-4 rounded-xl border border-[#82ADFF]/20 bg-[#82ADFF]/[.07] p-3"><p className="text-[11px] font-bold uppercase tracking-wider text-[#9ABFFF]">Presentación y accesorios informados</p><p className="mt-1 text-sm leading-relaxed text-white">{product.packageDetails}</p></div>}
+                {product.brand === 'Valve' && <div className="mt-3 rounded-xl border border-white/10 bg-white/[.035] p-3"><p className="text-xs font-semibold text-white">También podés usarla en escritorio</p><p className="mt-1 text-xs leading-relaxed text-[#B8C9E1]">Steam Deck permite conectar monitor, teclado y mouse con un dock o adaptador compatible. Consultá si esos accesorios están incluidos en esta unidad.</p></div>}
 
                 {/* Variant Selector */}
                 {product.variants.length > 1 && <div className="mt-6 pt-4 border-t border-white/[0.08]">
