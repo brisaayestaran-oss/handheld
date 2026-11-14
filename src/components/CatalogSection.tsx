@@ -128,7 +128,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
                 <div
                   key={product.id}
                   onClick={() => onSelectProduct(product, activeVariantIdx)}
-                  className="group relative flex flex-col justify-between rounded-3xl bg-[#101115] border border-white/[0.08] hover:border-white/[0.22] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)] overflow-hidden cursor-pointer"
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-[1.5rem] border border-[#91B3FF]/[0.13] bg-[linear-gradient(155deg,#142039,#101115_55%)] shadow-[0_12px_34px_rgba(0,0,0,.22)] transition-[border-color,box-shadow] duration-200 hover:border-[#6B96F0]/50 hover:shadow-[0_18px_50px_rgba(0,0,0,.35)] cursor-pointer"
                 >
                   {/* Card Header & Visual Container */}
                   <div className="p-4 sm:p-5 pb-2">
@@ -144,7 +144,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
                     </div>
 
                     {/* Real Console Photography Display */}
-                    <div className="py-3 px-2 flex items-center justify-center min-h-[150px] sm:min-h-[180px] transition-transform duration-300 group-hover:scale-[1.03]">
+                    <div className="flex min-h-[205px] items-center justify-center rounded-2xl bg-[radial-gradient(ellipse_at_center,rgba(56,106,209,.16),transparent_70%)] px-3 py-5 sm:min-h-[220px]">
                       <img
                         src={
                           product.realPhotos?.[0] || (product.brand === 'Lenovo'
@@ -152,7 +152,7 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
                             : !/oled/i.test(product.model) ? '/Steam%20deck/steamdeck_renderings/rendering07.webp' : '/Steam%20deck/steam_deck_oled/press_front_home.webp')
                         }
                         alt={`${product.name} · ${product.realPhotos?.length ? 'foto real de la unidad' : 'imagen ilustrativa del modelo'}`}
-                        className="w-full max-h-[170px] object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.75)] contrast-[1.03]"
+                        className="max-h-[205px] w-full object-contain drop-shadow-[0_16px_28px_rgba(0,0,0,.55)] transition-transform duration-300 group-hover:scale-[1.025]"
                         loading="lazy" decoding="async" width="400" height="220" referrerPolicy="no-referrer"
                       />
                     </div>
@@ -164,11 +164,10 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
                       <h3 className="text-xl font-black font-display text-white group-hover:text-[#3678FF] transition-colors">
                         {product.name}
                       </h3>
-                      <p className="mt-1 text-xs text-[#C8CAD1]/70 line-clamp-2 leading-relaxed">
-                        {product.shortDescription}
-                      </p>
+                      <p className="mt-2 text-xs leading-relaxed text-[#B8C6DE] line-clamp-2">{product.model}</p>
+                      {product.fullDescription && product.fullDescription !== product.model && <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[#9EAFCA]">{product.fullDescription}</p>}
 
-                      {!product.realPhotos?.length && <p className="mt-3 text-[11px] text-[#AFC0DC]">Imagen ilustrativa. Pedí fotos reales, accesorios, estado de batería y garantía aplicable a la unidad.</p>}
+                      {!product.realPhotos?.length && <p className="mt-2 text-[11px] text-[#9DB4D5]">Imagen ilustrativa · Solicitá fotos de esta unidad.</p>}
                       {/* Storage Variants selector (Clickable buttons) */}
                       {product.variants.length > 1 && (
                         <div className="mt-4 pt-4 border-t border-white/[0.06]">

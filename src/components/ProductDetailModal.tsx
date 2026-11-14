@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Product } from '../types/catalog';
 import { brandConfig, buildWhatsAppLink, buildGeneralWhatsAppLink } from '../config/brand';
 import { recordInterest } from '../services/interestAnalytics';
@@ -24,6 +24,11 @@ export const ProductDetailModal: React.FC<Props> = ({
   const [selectedVariantIdx, setSelectedVariantIdx] = useState<number>(initialVariantIndex);
   const [selectedGalleryIdx, setSelectedGalleryIdx] = useState<number>(0);
 
+  useEffect(() => {
+    setSelectedVariantIdx(initialVariantIndex);
+    setSelectedGalleryIdx(0);
+  }, [product?.id, initialVariantIndex]);
+
   if (!product) return null;
 
   const currentVariant = product.variants[selectedVariantIdx] || product.variants[0];
@@ -32,8 +37,8 @@ export const ProductDetailModal: React.FC<Props> = ({
   const relatedProducts = allProducts.filter((p) => p.id !== product.id).slice(0, 2);
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-5xl bg-[#101115] border border-white/[0.12] rounded-3xl overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.95)] my-8">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-lg flex items-start justify-center p-0 sm:items-center sm:p-5 animate-in fade-in duration-200">
+      <div className="relative my-0 w-full max-w-5xl overflow-hidden border border-white/[0.12] bg-[#101725] shadow-[0_30px_90px_rgba(0,0,0,.85)] sm:my-6 sm:rounded-3xl">
         {/* Top bar with close button */}
         <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 bg-[#101115]/90 backdrop-blur-md border-b border-white/[0.08]">
           <div className="flex items-center gap-2 text-xs font-mono-tech text-[#C8CAD1]">
@@ -44,7 +49,7 @@ export const ProductDetailModal: React.FC<Props> = ({
 
           <button
             onClick={onClose}
-            className="p-2 text-white/60 hover:text-white hover:bg-white/10 rounded-xl transition-colors"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white/75 transition-colors hover:bg-white/10 hover:text-white"
             aria-label="Cerrar ficha"
           >
             <X className="w-5 h-5" />
@@ -52,12 +57,12 @@ export const ProductDetailModal: React.FC<Props> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 sm:p-8 space-y-10 max-h-[85vh] overflow-y-auto">
+        <div className="max-h-[calc(100dvh-60px)] space-y-7 overflow-y-auto p-4 sm:max-h-[85vh] sm:p-7">
           {/* Top Section: Visual Gallery & Purchase Module */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-12 lg:gap-8">
             {/* Visual Viewport & Thumbnails (Left) */}
             <div className="lg:col-span-7 flex flex-col space-y-4">
-              <div className="p-8 rounded-2xl bg-[#090A0D] border border-white/[0.06] flex items-center justify-center min-h-[300px] sm:min-h-[380px] relative overflow-hidden group">
+              <div className="group relative flex min-h-[250px] items-center justify-center overflow-hidden rounded-2xl border border-white/[0.07] bg-[radial-gradient(ellipse_at_center,#182C4C,#090E19_72%)] p-5 sm:min-h-[380px] sm:p-8">
                 <img
                   src={
                     product.realPhotos?.[selectedGalleryIdx] || (product.brand === 'Lenovo'
@@ -65,7 +70,7 @@ export const ProductDetailModal: React.FC<Props> = ({
                       : !/oled/i.test(product.model) ? '/Steam%20deck/steamdeck_renderings/rendering07.webp' : '/Steam%20deck/steam_deck_oled/press_front_home.webp')
                   }
                   alt={`${product.name} · ${product.realPhotos?.length ? 'foto real de la unidad' : 'imagen ilustrativa'}`}
-                  className="w-full max-h-[280px] object-contain drop-shadow-[0_25px_45px_rgba(0,0,0,0.95)] contrast-[1.03] transition-transform duration-300 group-hover:scale-105"
+                  className="max-h-[320px] w-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,.7)]"
                   referrerPolicy="no-referrer"
                 />
 
@@ -109,7 +114,7 @@ export const ProductDetailModal: React.FC<Props> = ({
                 </p>
 
                 {/* Variant Selector */}
-                <div className="mt-6 pt-4 border-t border-white/[0.08]">
+                {product.variants.length > 1 && <div className="mt-6 pt-4 border-t border-white/[0.08]">
                   <span className="text-sm font-semibold text-white uppercase tracking-wider block mb-3">
                     Seleccioná Capacidad de Almacenamiento:
                   </span>
@@ -131,7 +136,7 @@ export const ProductDetailModal: React.FC<Props> = ({
                       </button>
                     ))}
                   </div>
-                </div>
+                </div>}
 
                 {/* Price Display */}
                 <div className="mt-6 p-4 rounded-2xl bg-[#090A0D] border border-white/[0.06]">
@@ -179,7 +184,7 @@ export const ProductDetailModal: React.FC<Props> = ({
               <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] text-xs text-[#C8CAD1]/70 flex items-start gap-3">
                 <ShieldCheck className="w-4 h-4 text-[#3678FF] shrink-0 mt-0.5" />
                 <span>
-                  Equipo de caja abierta y poco uso. Solicitá fotos reales, estado de la unidad, accesorios, garantía aplicable y condiciones de pago y entrega antes de confirmar.
+                  Antes de confirmar, consultá el estado de esta unidad, los accesorios incluidos, fotos reales, medios de pago, garantía aplicable y condiciones de entrega.
                 </span>
               </div>
             </div>
