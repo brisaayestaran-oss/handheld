@@ -10,10 +10,11 @@ interface Props {
   loading?: boolean;
   loadError?: string;
   products: Product[];
+  fetchedAt?: string;
   onSelectProduct: (product: Product, variantIndex?: number) => void;
 }
 
-export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loading = false, loadError = '' }) => {
+export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSelectProduct, loading = false, loadError = '' }) => {
   const [selectedBrand, setSelectedBrand] = useState<string>('Todas');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedVariantByProduct, setSelectedVariantByProduct] = useState<Record<string, number>>({});
@@ -58,7 +59,8 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
             <h2 className="text-3xl sm:text-5xl font-black font-display text-white tracking-tight uppercase">
               ELEGÍ TU CONSOLA
             </h2>
-            <p className="mt-3 text-sm text-[#AFC0DC]">{loading ? 'Actualizando disponibilidad…' : loadError ? 'Disponibilidad no confirmada' : `${products.length} ${products.length === 1 ? 'consola disponible' : 'consolas disponibles'} para consultar`}</p>
+            <p className="mt-3 text-sm text-[#AFC0DC]">{loading ? 'Actualizando disponibilidad…' : `${products.length} ${products.length === 1 ? 'consola disponible' : 'consolas disponibles'} para consultar`}</p>
+            {fetchedAt && !loading && <p className="mt-1 text-[11px] text-[#849BBF]">Última consulta de stock: {new Date(fetchedAt).toLocaleString('es-AR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}{loadError ? ' · actualización pendiente' : ''}</p>}
 
           </div>
           <div className="flex items-center gap-2 text-xs font-mono-tech text-[#C8CAD1]/60">
@@ -164,7 +166,8 @@ export const CatalogSection: React.FC<Props> = ({ products, onSelectProduct, loa
                       <h3 className="text-xl font-black font-display text-white group-hover:text-[#3678FF] transition-colors">
                         {product.name}
                       </h3>
-                      <p className="mt-2 text-xs leading-relaxed text-[#B8C6DE] line-clamp-2">{product.model}</p>
+                      {!product.packageDetails && <p className="mt-2 text-xs leading-relaxed text-[#B8C6DE] line-clamp-2">{product.model}</p>}
+                      {product.packageDetails && <p className="mt-3 rounded-xl border border-white/10 bg-white/[.035] px-3 py-2 text-xs leading-relaxed text-[#D1DEEF]"><span className="font-bold text-white">Presentación / accesorios: </span>{product.packageDetails}</p>}
                       {product.fullDescription && product.fullDescription !== product.model && <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[#9EAFCA]">{product.fullDescription}</p>}
 
                       {!product.realPhotos?.length && <p className="mt-2 text-[11px] text-[#9DB4D5]">Imagen ilustrativa · Solicitá fotos de esta unidad.</p>}

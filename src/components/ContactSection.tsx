@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { brandConfig, buildGeneralWhatsAppLink } from '../config/brand';
 import { MessageCircle, MapPin, Truck, HelpCircle, ChevronDown, ShieldAlert } from 'lucide-react';
+import { recordInterest } from '../services/interestAnalytics';
 
 export const ContactSection: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -55,6 +56,7 @@ export const ContactSection: React.FC = () => {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
               href={buildGeneralWhatsAppLink('Quiero consultar por una consola disponible')}
+              onClick={() => recordInterest('purchase_click',undefined,'whatsapp')}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto px-9 py-4 text-xs sm:text-sm font-black font-display tracking-wider uppercase text-white bg-[#3678FF] hover:bg-[#2563EB] rounded-xl transition-all shadow-[0_0_40px_rgba(54,120,255,0.4)] flex items-center justify-center gap-2.5 active:scale-95"

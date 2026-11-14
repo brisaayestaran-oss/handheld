@@ -50,7 +50,7 @@ export async function fetchLiveSheetRows(): Promise<LiveSheetRow[]> {
     const status = cells[7]?.trim() ?? '';
     const priceARS = parsePublishedPrice(cells[5] ?? '');
     if (!name || !model || !['en stock', 'agotado'].includes(status.toLowerCase())) return [];
-    if (!Number.isFinite(priceARS) || priceARS <= 0) {
+    if (status.toLowerCase() === 'en stock' && (!Number.isFinite(priceARS) || priceARS <= 0)) {
       throw new Error('Precio publicado inválido en fila ' + row);
     }
     return [{ row, name, description: cells[1]?.trim() ?? '', model, status, priceARS }];

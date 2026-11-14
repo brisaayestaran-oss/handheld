@@ -8,8 +8,9 @@ export function AdminPhotoUploader({ product }: { product: Product }) {
  const [busy,setBusy]=React.useState(false);
  const [loading,setLoading]=React.useState(true);
  const [status,setStatus]=React.useState('');
- const row=product.photoStorageRow ?? Number(product.id.split('-').at(-1));
+ const row=product.photoStorageRow ?? 0;
  const refresh=React.useCallback(async()=>{
+  if (!row) { setLoading(false); setStatus('Estas unidades comparten modelo. Se necesita un identificador único antes de vincular fotos.'); return; }
   setLoading(true);
   try {setPhotos(await listProductPhotos(row));}
   catch(e){setStatus(e instanceof Error?e.message:'No se pudieron consultar las fotos');}
@@ -47,6 +48,7 @@ export function AdminPhotoUploader({ product }: { product: Product }) {
   catch(e){setStatus(e instanceof Error?e.message:'No se pudo eliminar');}
   finally{setBusy(false);}
  }
+ if (!row) return <p role="status" className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/10 p-4 text-sm text-amber-100">Dos unidades tienen el mismo nombre y modelo. Para evitar mezclar fotografías, asignales un identificador único antes de cargar fotos reales.</p>;
  return <div className="mt-5 rounded-2xl border border-[#3678FF]/25 bg-gradient-to-br from-[#152448]/80 to-[#0A1120] p-4 sm:p-5 space-y-4">
   <div className="flex flex-wrap items-center justify-between gap-3">
    <div><h3 className="flex items-center gap-2 font-bold text-white"><Camera size={19} className="text-[#80AEFF]"/> Galería de esta unidad</h3>

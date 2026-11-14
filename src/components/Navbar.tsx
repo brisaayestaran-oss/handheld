@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { brandConfig, buildGeneralWhatsAppLink } from '../config/brand';
 import { HandheldLogo } from './HandheldLogo';
+import { recordInterest } from '../services/interestAnalytics';
 import { MessageCircle, Menu, X, ArrowUpRight, Sparkles } from 'lucide-react';
 
 interface Props {
@@ -83,6 +84,7 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
             {/* High-Impact WhatsApp Primary Button */}
             <a
               href={buildGeneralWhatsAppLink('Consulta desde cabecera')}
+              onClick={() => recordInterest('purchase_click',undefined,'whatsapp')}
               target="_blank"
               rel="noopener noreferrer"
               className="relative inline-flex items-center gap-2.5 px-4 sm:px-5 py-2.5 text-xs font-bold font-display uppercase tracking-wider text-white bg-gradient-to-r from-[#101218] via-[#141824] to-[#101218] hover:from-[#151A28] hover:to-[#182038] border border-[#3678FF]/50 hover:border-[#3678FF] rounded-xl transition-all shadow-[0_0_25px_rgba(54,120,255,0.25)] hover:shadow-[0_0_35px_rgba(54,120,255,0.45)] whitespace-nowrap shrink-0 group active:scale-95 overflow-hidden"

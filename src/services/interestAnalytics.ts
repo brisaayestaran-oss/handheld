@@ -11,11 +11,15 @@ export function recordInterest(
   product?: { id: string; name: string; capacity?: string },
   channel?: 'whatsapp' | 'mercadolibre'
 ): void {
-  if (!product?.id || !product.name) return;
+  // Las consultas generales no tienen una unidad asociada, pero también son
+  // contactos comerciales. Diferenciarlas de ventas efectivamente realizadas.
+  if (type !== 'product_view' && type !== 'purchase_click') return;
+  if ((!product?.id || !product.name) && type !== 'purchase_click') return;
+  const target = product?.id && product.name ? product : { id: 'handheld-general', name: 'Consulta general HANDHELD' };
   const payload = {
     event_type: type,
-    product_id: product.id.slice(0, 120),
-    product_name: [product.name, product.capacity].filter(Boolean).join(' · ').slice(0, 180),
+    product_id: target.id.slice(0, 120),
+    product_name: [target.name, product?.capacity].filter(Boolean).join(' · ').slice(0, 180),
     channel: type === 'purchase_click' ? (channel ?? 'whatsapp') : null
   };
   void import('../lib/supabase').then(({ getSupabaseClient }) => {

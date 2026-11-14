@@ -12,6 +12,7 @@ import { Product } from './types/catalog';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { SteamDeckShowcaseSection } from './components/SteamDeckShowcaseSection';
+import { FeatureHighlightsSection } from './components/FeatureHighlightsSection';
 import { ConsoleComparisonSection } from './components/ConsoleComparisonSection';
 import { CatalogSection } from './components/CatalogSection';
 import { BrandStorySection } from './components/BrandStorySection';
@@ -38,7 +39,10 @@ export default function App() {
       try {
         const result = await fetchCatalogFromSheet();
         if (!active) return;
-        setProducts(result.products);
+        setProducts(current => result.products.map(product => ({
+          ...product,
+          realPhotos: current.find(previous => previous.id === product.id)?.realPhotos ?? []
+        })));
         setSoldCount(result.soldCount);
         setStockFetchedAt(result.fetchedAt);
         setStockWarning('');
@@ -53,10 +57,9 @@ export default function App() {
         }).catch(error => console.warn('Fotos del catálogo:', error));
       } catch (error) {
         if (active) {
-          setProducts([]);
-          setSoldCount(0);
-          setStockFetchedAt('');
-          setStockWarning('Inventario temporalmente no disponible. Consultá stock y precio por WhatsApp.');
+          // Una falla temporal no debe borrar las unidades que ya se mostraban.
+          // La consulta anterior se conserva, pero queda visiblemente sin confirmar.
+          setStockWarning('No se pudo actualizar el inventario. Los datos visibles son de la última consulta exitosa; confirmá disponibilidad por WhatsApp.');
           setStockLoading(false);
         }
         console.warn('Stock de Google Sheets:', error);
@@ -70,6 +73,12 @@ export default function App() {
   }, []);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState<number>(0);
+
+  // La ficha abierta sigue la actualización real del inventario; si se agota,
+  // deja de ofrecerse para consulta como unidad disponible.
+  useEffect(() => {
+    setSelectedProduct(current => current ? (products.find(p => p.id === current.id) ?? null) : null);
+  }, [products]);
 
   // Admin routing state
   const [viewMode, setViewMode] = useState<'public' | 'admin'>(() => {
@@ -194,6 +203,7 @@ export default function App() {
           loading={stockLoading}
           loadError={stockWarning}
           products={products}
+          fetchedAt={stockFetchedAt}
           onSelectProduct={handleOpenProduct}
         />
 
@@ -204,6 +214,7 @@ export default function App() {
         <ConsoleComparisonSection steamDeckProduct={steamDeckOled} steamDeckLcdProduct={steamDeckLcd} legionGoProduct={legionGo} hasOledStock={products.some(p => p.name.toLowerCase().includes('oled') && p.variants.some(v => v.inStock))}
           onSelectProduct={(p) => handleOpenProduct(p, 0)} />
 
+        <FeatureHighlightsSection />
         <SteamDeckShowcaseSection />
 
         {/* Section 6: Nuestra Marca */}

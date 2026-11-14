@@ -4,7 +4,7 @@ import { brandConfig, buildWhatsAppLink, buildGeneralWhatsAppLink } from '../con
 import { recordInterest } from '../services/interestAnalytics';
 import { SteamDeckVisual } from './visuals/SteamDeckVisual';
 import { LegionGoVisual } from './visuals/LegionGoVisual';
-import { X, MessageCircle, Check, ArrowRight, ShieldCheck, Zap, Info } from 'lucide-react';
+import { X, MessageCircle, Check, ArrowRight, ShieldCheck, Zap, Info, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Props {
   product: Product | null;
@@ -74,6 +74,7 @@ export const ProductDetailModal: React.FC<Props> = ({
                   referrerPolicy="no-referrer"
                 />
 
+                {(product.realPhotos?.length ?? 0) > 1 && <div className="absolute inset-x-3 top-1/2 flex -translate-y-1/2 items-center justify-between sm:inset-x-5"><button type="button" aria-label="Foto anterior" onClick={() => setSelectedGalleryIdx(i => (i - 1 + product.realPhotos!.length) % product.realPhotos!.length)} className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#0C1527]/85 text-white"><ChevronLeft size={19}/></button><button type="button" aria-label="Foto siguiente" onClick={() => setSelectedGalleryIdx(i => (i + 1) % product.realPhotos!.length)} className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-[#0C1527]/85 text-white"><ChevronRight size={19}/></button></div>}
                 {/* Subtitle tag */}
                 <div className="absolute bottom-4 left-4 right-4 text-center text-[11px] font-mono-tech text-[#C8CAD1]/50 bg-black/40 backdrop-blur-sm py-1 rounded">
                   {product.realPhotos?.length ? 'Foto real de esta unidad' : 'Imagen ilustrativa del modelo. Solicitá fotografías de la unidad.'}
@@ -82,19 +83,7 @@ export const ProductDetailModal: React.FC<Props> = ({
 
               {/* Gallery Thumbnails */}
               <div className="flex items-center gap-2 overflow-x-auto pb-1">
-                {product.realPhotos?.length ? product.realPhotos.map((url,idx)=><button key={url} type="button" onClick={()=>setSelectedGalleryIdx(idx)} className={`shrink-0 rounded-xl border p-1 ${selectedGalleryIdx===idx?'border-[#78A9FF] bg-[#3678FF]/20':'border-white/20'}`}><img src={url} alt={`Foto real ${idx+1}`} className="h-16 w-20 rounded-lg object-cover" /></button>) : product.galleryImages.map((img, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setSelectedGalleryIdx(idx)}
-                    className={`px-3 py-2 rounded-xl text-left text-xs border transition-all whitespace-nowrap ${
-                      selectedGalleryIdx === idx
-                        ? 'bg-white/10 border-white/30 text-white'
-                        : 'bg-white/[0.02] border-white/[0.06] text-[#C8CAD1]/60 hover:text-white'
-                    }`}
-                  >
-                    <div className="font-semibold">{img.title}</div>
-                  </button>
-                ))}
+                {product.realPhotos?.length ? product.realPhotos.map((url,idx)=><button key={url} type="button" aria-label={`Ver foto real ${idx+1}`} onClick={()=>setSelectedGalleryIdx(idx)} className={`shrink-0 rounded-xl border p-1 ${selectedGalleryIdx===idx?'border-[#78A9FF] bg-[#3678FF]/20':'border-white/20'}`}><img src={url} alt={`Foto real ${idx+1}`} loading="lazy" decoding="async" className="h-16 w-20 rounded-lg object-cover" /></button>) : <p className="rounded-xl border border-white/10 bg-white/[.035] px-3 py-2 text-xs leading-relaxed text-[#B7C9E2]">Todavía no hay fotos reales cargadas para esta unidad. Podés solicitarlas por WhatsApp.</p>}
               </div>
             </div>
 
@@ -109,9 +98,10 @@ export const ProductDetailModal: React.FC<Props> = ({
                 <h1 className="text-2xl sm:text-3xl font-black font-display text-white">
                   {product.name}
                 </h1>
-                <p className="mt-1 text-xs text-[#C8CAD1] leading-relaxed">
+                {!product.packageDetails && <p className="mt-1 text-xs text-[#C8CAD1] leading-relaxed">
                   {product.subtitle}
-                </p>
+                </p>}
+                {product.packageDetails && <div className="mt-4 rounded-xl border border-[#82ADFF]/20 bg-[#82ADFF]/[.07] p-3"><p className="text-[11px] font-bold uppercase tracking-wider text-[#9ABFFF]">Presentación y accesorios informados</p><p className="mt-1 text-sm leading-relaxed text-white">{product.packageDetails}</p></div>}
 
                 {/* Variant Selector */}
                 {product.variants.length > 1 && <div className="mt-6 pt-4 border-t border-white/[0.08]">
@@ -193,7 +183,7 @@ export const ProductDetailModal: React.FC<Props> = ({
           {/* Description & Key Highlights */}
           <div className="space-y-4 pt-6 border-t border-white/[0.08]">
             <h3 className="text-lg font-bold font-display text-white uppercase">
-              Descripción & Puntos Clave
+              Descripción informada de la unidad
             </h3>
             <p className="text-sm text-[#C8CAD1] leading-relaxed">
               {product.fullDescription}

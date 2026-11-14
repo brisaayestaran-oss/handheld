@@ -44,7 +44,7 @@ function stablePhotoRow(name: string, model: string): number {
 
 function toProduct(row: LiveSheetRow, index: number): Product {
   const isLenovo = /legion/i.test(row.name);
-  const isOled = /oled/i.test(row.model);
+  const isOled = /oled/i.test(row.name + ' ' + row.model);
   const baseId = isLenovo ? 'lenovo-legion-go' : isOled ? 'steam-deck-oled' : 'steam-deck-lcd-refurbished';
   const base = PRODUCTS.find(p => p.id === baseId);
   if (!base) throw new Error('No se encontró la plantilla para ' + row.name);
@@ -52,10 +52,12 @@ function toProduct(row: LiveSheetRow, index: number): Product {
   const label = capacity ? capacity[1] + ' ' + capacity[2].toUpperCase() : row.model;
   const name = isLenovo ? 'Lenovo Legion Go Z1 Extreme ' + label : 'Steam Deck ' + (isOled ? 'OLED ' : 'LCD ') + label;
   const photoStorageRow = stablePhotoRow(row.name, row.model);
+  const packageDetails = row.model.split('+').slice(1).join('+').trim() || undefined;
   return {
     ...base,
     id: 'inventario-unidad-' + photoStorageRow,
     photoStorageRow,
+    packageDetails,
     name,
     model: row.model,
     subtitle: row.model,
@@ -82,6 +84,16 @@ export async function fetchCatalogFromSheet(): Promise<SheetStockState> {
   const data = await response.json() as { rows: LiveSheetRow[]; fetchedAt: string };
   if (!Array.isArray(data.rows)) throw new Error('Respuesta inválida del inventario');
   const available = data.rows.filter(r => normalize(r.status) === 'en stock');
-  const products = available.map((r, index) => ({ ...toProduct(r, index), realPhotos: [] as string[] }));
+  const provisional = available.map((r, index) => toProduct(r, index));
+  const counts = new Map<number, number>();
+  provisional.forEach(p => counts.set(p.photoStorageRow!, (counts.get(p.photoStorageRow!) ?? 0) + 1));
+  // Dos unidades con idéntica identidad no pueden compartir fotos. Hasta tener un SKU
+  // persistente en Sheets, mostramos ambas sin asociar galerías potencialmente ajenas.
+  const products = provisional.map((p, index) => {
+    if ((counts.get(p.photoStorageRow!) ?? 0) <= 1) return { ...p, realPhotos: [] as string[] };
+    const row = available[index].row;
+    return { ...p, id: `${p.id}-fila-${row}`, photoStorageRow: undefined,
+      variants: p.variants.map(v => ({ ...v, sku: `${v.sku}-fila-${row}` })), realPhotos: [] as string[] };
+  });
   return { products, soldCount: data.rows.length - available.length, fetchedAt: data.fetchedAt };
 }
