@@ -25,31 +25,14 @@ export const ContactSection: React.FC = () => {
   ];
 
   return (
-    <section id="contacto" className="relative py-24 sm:py-32 bg-transparent overflow-hidden">
+    <section id="contacto" className="relative scroll-mt-20 py-10 sm:py-16 bg-transparent overflow-hidden">
       {/* Background glow */}
       {/* Efecto difuminado compartido con las demas secciones. */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="mb-14">
-          <p className="text-xs font-bold uppercase tracking-[.2em] text-[#8FA9FF]">COMPRÁ CON INFORMACIÓN CLARA</p>
-          <h2 className="mt-3 text-3xl font-black uppercase tracking-tight text-white sm:text-4xl">Conocé tu consola antes de decidir.</h2>
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            <div className="rounded-2xl border border-white/10 bg-[#101725] p-6">
-              <h3 className="font-bold text-white">Caja abierta · poco uso</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#B8C7DD]">Son equipos usados con mínimo uso, no nuevos sellados. El estado y los accesorios pueden variar por unidad.</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-[#101725] p-6">
-              <h3 className="font-bold text-white">Fotos y detalles reales</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#B8C7DD]">Las fotografías promocionales ilustran el modelo. Pedí imágenes de la consola concreta, batería, controles y accesorios incluidos.</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-[#101725] p-6">
-              <h3 className="font-bold text-white">Sin sorpresas al comprar</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#B8C7DD]">Confirmamos por WhatsApp precio final, disponibilidad, medios de pago, garantía aplicable, envío y entrega antes de cerrar la operación.</p>
-            </div>
-          </div>
-        </div>
+
         {/* Giant Closing Banner */}
-        <div className="p-8 sm:p-16 rounded-3xl bg-gradient-to-b from-[#101115] to-[#0A0B0E] border border-white/[0.12] text-center relative overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.9)] mb-20">
+        <div className="p-8 sm:p-16 rounded-3xl bg-gradient-to-b from-[#101115] to-[#0A0B0E] border border-white/[0.12] text-center relative overflow-hidden shadow-[0_30px_90px_rgba(0,0,0,0.9)] mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] mb-6">
             <span className="w-2 h-2 rounded-full bg-[#3678FF]" />
             <span className="text-[11px] font-mono-tech text-[#C8CAD1] uppercase tracking-wider">
