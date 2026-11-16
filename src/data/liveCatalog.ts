@@ -59,7 +59,7 @@ function toProduct(row: LiveSheetRow, index: number): Product {
     id: 'inventario-unidad-' + photoStorageRow,
     photoStorageRow,
     packageDetails,
-    coverImage: limitedWhite ? '/images/steam-deck-oled-1tb-white.jpg' : undefined,
+    coverImage: limitedWhite ? '/images/steam-deck-oled-1tb-white-transparent.png' : undefined,
     name: limitedWhite ? name + ' · Edición Limitada' : name,
     model: row.model,
     subtitle: row.model,

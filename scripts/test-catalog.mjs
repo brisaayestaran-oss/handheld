@@ -60,7 +60,7 @@ globalThis.fetch = async () => response([specialOled]);
 const limitedResult = await fetchCatalogFromSheet();
 assert.equal(limitedResult.products.length,1);
 assert.match(limitedResult.products[0].name,/Edición Limitada/);
-assert.equal(limitedResult.products[0].coverImage,'/images/steam-deck-oled-1tb-white.jpg');
+assert.equal(limitedResult.products[0].coverImage,'/images/steam-deck-oled-1tb-white-transparent.png');
 assert.equal(limitedResult.products[0].variants[0].priceARSApprox,1600000);
 globalThis.fetch = async () => response([{...specialOled,description:'OLED normal',row:19}]);
 const normalOled = await fetchCatalogFromSheet();
