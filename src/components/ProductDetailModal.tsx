@@ -65,7 +65,7 @@ export const ProductDetailModal: React.FC<Props> = ({
               <div className="group relative flex min-h-[250px] items-center justify-center overflow-hidden rounded-2xl border border-white/[0.07] bg-[radial-gradient(ellipse_at_center,#182C4C,#090E19_72%)] p-5 sm:min-h-[380px] sm:p-8">
                 <img
                   src={
-                    product.realPhotos?.[selectedGalleryIdx] || (product.brand === 'Lenovo'
+                    product.realPhotos?.[selectedGalleryIdx] || product.coverImage || (product.brand === 'Lenovo'
                       ? '/optimized/legion-go-official-main.webp'
                       : !/oled/i.test(product.model) ? '/Steam%20deck/steamdeck_renderings/rendering07.webp' : '/Steam%20deck/steam_deck_oled/press_front_home.webp')
                   }

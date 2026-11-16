@@ -51,6 +51,7 @@ function toProduct(row: LiveSheetRow, index: number): Product {
   const capacity = row.model.match(/\b(\d+)\s*(tb|gb)\b/i);
   const label = capacity ? capacity[1] + ' ' + capacity[2].toUpperCase() : row.model;
   const name = isLenovo ? 'Lenovo Legion Go Z1 Extreme ' + label : 'Steam Deck ' + (isOled ? 'OLED ' : 'LCD ') + label;
+  const limitedWhite = isOled && normalize(row.description).includes('edicion limitada');
   const photoStorageRow = stablePhotoRow(row.name, row.model);
   const packageDetails = row.model.split('+').slice(1).join('+').trim() || undefined;
   return {
@@ -58,7 +59,8 @@ function toProduct(row: LiveSheetRow, index: number): Product {
     id: 'inventario-unidad-' + photoStorageRow,
     photoStorageRow,
     packageDetails,
-    name,
+    coverImage: limitedWhite ? '/images/steam-deck-oled-1tb-white.jpg' : undefined,
+    name: limitedWhite ? name + ' · Edición Limitada' : name,
     model: row.model,
     subtitle: row.model,
     slug: 'unidad-' + photoStorageRow,

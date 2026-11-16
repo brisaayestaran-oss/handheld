@@ -149,7 +149,7 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
                     <div className="flex min-h-[205px] items-center justify-center rounded-2xl bg-[radial-gradient(ellipse_at_center,rgba(56,106,209,.16),transparent_70%)] px-3 py-5 sm:min-h-[220px]">
                       <img
                         src={
-                          product.realPhotos?.[0] || (product.brand === 'Lenovo'
+                          product.realPhotos?.[0] || product.coverImage || (product.brand === 'Lenovo'
                             ? '/optimized/legion-go-official-main.webp'
                             : !/oled/i.test(product.model) ? '/Steam%20deck/steamdeck_renderings/rendering07.webp' : '/Steam%20deck/steam_deck_oled/press_front_home.webp')
                         }

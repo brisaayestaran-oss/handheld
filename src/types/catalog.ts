@@ -52,6 +52,7 @@ export interface Product {
   selectedVariantIndex?: number;
   accentColor: string;
   badge?: string;
+  coverImage?: string;
   realPhotos?: string[];
   galleryImages: {
     title: string;
