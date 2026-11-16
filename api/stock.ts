@@ -44,7 +44,12 @@ export async function fetchLiveSheetRows(): Promise<LiveSheetRow[]> {
   }
   return data.slice(1).flatMap((cells, i) => {
     const row = i + 2;
-    if (cells[2]?.trim().toLowerCase() !== 'handheld') return [];
+    const type = cells[2]?.trim().toLowerCase();
+    // Esta Legion Go personal se ofrece en la tienda aunque el Excel la clasifique como Servicio.
+    const personalLegionForSale = type === 'servicio' &&
+      cells[0]?.trim().toLowerCase() === 'legion go' &&
+      cells[3]?.trim().toLowerCase() === '512gb z1 extreme + completa (se incluyeron adaptadores)';
+    if (type !== 'handheld' && !personalLegionForSale) return [];
     const name = cells[0]?.trim() ?? '';
     const model = cells[3]?.trim() ?? '';
     const status = cells[7]?.trim() ?? '';

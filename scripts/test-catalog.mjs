@@ -42,4 +42,17 @@ const parsed = await fetchLiveSheetRows();
 assert.equal(parsed.length,2);
 assert.equal(parsed[0].priceARS,0);
 assert.equal(parsed[1].priceARS,1200000);
+
+// La Legion Go personal del Excel se vende aunque su Tipo sea Servicio.
+const serviceCsv = [
+  ['Nombre del articulo','Descripción','Tipo','Modelo','Comprado a:','Precio publicado','Fecha posteada','Estado'].join(','),
+  ['Legion Go','Uso personal','Servicio','512gb Z1 Extreme + Completa (Se incluyeron Adaptadores)','800000','1200000','','En stock'].join(','),
+  ['Servicio técnico','Reparación','Servicio','Reparación general','0','15000','','En stock'].join(','),
+  ['Legion Go','Otra unidad de servicio','Servicio','512gb Z1 Extreme + Completa','800000','1400000','','En stock'].join(',')
+].join(String.fromCharCode(10));
+globalThis.fetch = async () => new Response(serviceCsv,{status:200});
+const serviceRows = await fetchLiveSheetRows();
+assert.equal(serviceRows.length,1,'Solo incluir la Legion Go personal, no otros Servicios');
+assert.equal(serviceRows[0].name,'Legion Go');
+assert.equal(serviceRows[0].priceARS,1200000);
 console.log('PASS: stock, inserciones, fotos, duplicados y agotados sin precio');
