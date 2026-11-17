@@ -15,7 +15,7 @@ import { SteamDeckShowcaseSection } from './components/SteamDeckShowcaseSection'
 import { FeatureHighlightsSection } from './components/FeatureHighlightsSection';
 import { ConsoleComparisonSection } from './components/ConsoleComparisonSection';
 import { CatalogSection } from './components/CatalogSection';
-import { BrandStorySection } from './components/BrandStorySection';
+import { BrandStorySection, FollowUsSection } from './components/BrandStorySection';
 import { SocialSection } from './components/SocialSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
@@ -206,6 +206,9 @@ export default function App() {
           fetchedAt={stockFetchedAt}
           onSelectProduct={handleOpenProduct}
         />
+
+        {/* Redes sociales: inmediatamente después del catálogo, sin repetir en Quiénes somos. */}
+        <FollowUsSection />
 
         {/* Comprar directo o solicitar publicación de Mercado Libre, inmediatamente después del catálogo. */}
         <SocialSection />

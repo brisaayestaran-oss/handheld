@@ -20,10 +20,18 @@ export const BrandStorySection: React.FC = () => (
           <a href={buildGeneralWhatsAppLink('Quiero hablar con HANDHELD sobre una consola')} onClick={() => recordInterest('purchase_click',undefined,'whatsapp')} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-[#A7C7FF] hover:text-white">Hablemos por WhatsApp <ArrowUpRight size={17}/></a>
         </div>
       </div>
-      <div className="mt-12 flex flex-col gap-5 border-t border-white/10 pt-8 sm:mt-16 sm:flex-row sm:items-center sm:justify-between">
+    </div>
+  </section>
+);
+
+export const FollowUsSection: React.FC = () => (
+  <section id="seguinos" aria-label="Seguinos en redes sociales" className="relative scroll-mt-20 px-5 py-10 sm:px-8 sm:py-14">
+    <div className="mx-auto max-w-6xl rounded-2xl border border-[#7AA5F1]/20 bg-[#111C32]/75 px-5 py-6 sm:px-8 sm:py-8">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 className="text-base font-bold text-white">Seguinos. El gaming también es compartir.</h3>
-          <p className="mt-1 text-sm text-[#AFC0DA]">Novedades, fotos y contacto directo.</p>
+          <p className="text-[11px] font-bold uppercase tracking-[.2em] text-[#96B9FA]">COMUNIDAD HANDHELD</p>
+          <h2 className="mt-2 text-lg font-bold text-white sm:text-xl">¿Te apasiona el gaming portátil?</h2>
+          <p className="mt-1 max-w-lg text-sm text-[#B9CBE6]">Seguinos para ver nuevas consolas, comparativas y próximos ingresos.</p>
         </div>
         <div className="grid w-full grid-cols-2 gap-2 sm:w-auto sm:min-w-[390px] sm:gap-3">
           <a href={brandConfig.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Seguir a HANDHELD en Instagram" className="group inline-flex min-h-14 min-w-0 items-center justify-center gap-2 rounded-xl border border-[#88B6FF] bg-[#3678FF] px-2 py-3 text-xs font-extrabold text-white shadow-[0_0_22px_rgba(54,120,255,.28)] transition-all hover:border-white hover:bg-[#2868E9] hover:shadow-[0_0_32px_rgba(54,120,255,.48)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A8CBFF] sm:px-5 sm:text-sm"><Instagram size={20} className="shrink-0"/><span className="leading-tight">Seguir en Instagram</span><ArrowUpRight size={15} className="hidden shrink-0 sm:block"/></a>
