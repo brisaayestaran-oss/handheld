@@ -32,9 +32,6 @@ export const SteamDeckShowcaseSection: React.FC = () => {
   return (
     <section aria-label="Experiencia de juego portátil" className="relative px-0 py-7 sm:px-8 sm:py-14">
       <div className="relative mx-auto min-h-[510px] max-w-[1440px] overflow-hidden bg-[#0B1222] sm:min-h-[540px] lg:min-h-[630px]">
-        <img src="/optimized/lifestyle_camping.webp" loading="lazy" decoding="async" width="1200" height="675"
-          alt="Una consola portátil en un momento de juego fuera de casa"
-          className="absolute inset-0 h-full w-full object-cover object-center" />
         <video ref={videoRef} muted loop playsInline preload="none" disablePictureInPicture
           aria-label="Video de gaming portátil durante un viaje"
           className="absolute inset-0 h-full w-full object-cover object-center" />
