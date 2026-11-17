@@ -55,6 +55,16 @@ const serviceRows = await fetchLiveSheetRows();
 assert.equal(serviceRows.length,1,'Solo incluir la Legion Go personal, no otros Servicios');
 assert.equal(serviceRows[0].name,'Legion Go');
 assert.equal(serviceRows[0].priceARS,1200000);
+// La categoría Handheld propia debe incluirse sin abrir el catálogo a otros servicios.
+const ownCsv = [
+  ['Nombre del articulo','Descripción','Tipo','Modelo','Comprado a:','Precio publicado','Fecha posteada','Estado'].join(','),
+  ['Legion Go','Consola propia','Handheld propia','512gb Z1 Extreme + Completa (Se incluyeron Adaptadores)','800000','1200000','','En stock'].join(','),
+  ['Accesorio','Servicio interno','Servicio','Otro','50000','100000','','En stock'].join(',')
+].join('\n');
+globalThis.fetch = async () => new Response(ownCsv,{status:200});
+const ownRows = await fetchLiveSheetRows();
+assert.equal(ownRows.length,1,'Solo publicar la consola Handheld propia');
+assert.equal(ownRows[0].priceARS,1200000);
 const specialOled = {row:16,name:'Steam Deck',description:'Edicion limitada oled',model:'1tb OLED + completa',status:'En stock',priceARS:1600000};
 globalThis.fetch = async () => response([specialOled]);
 const limitedResult = await fetchCatalogFromSheet();

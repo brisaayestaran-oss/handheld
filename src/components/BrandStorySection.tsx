@@ -1,5 +1,5 @@
 import React from 'react';
-import { Instagram, Facebook, MessageCircle, ArrowUpRight } from 'lucide-react';
+import { Instagram, Facebook, ArrowUpRight } from 'lucide-react';
 import { brandConfig, buildGeneralWhatsAppLink } from '../config/brand';
 import { recordInterest } from '../services/interestAnalytics';
 
@@ -25,10 +25,9 @@ export const BrandStorySection: React.FC = () => (
           <h3 className="text-base font-bold text-white">Seguinos. El gaming también es compartir.</h3>
           <p className="mt-1 text-sm text-[#AFC0DA]">Novedades, fotos y contacto directo.</p>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <a href={brandConfig.instagramUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 px-5 text-sm font-semibold text-white hover:border-[#8DB8FF] hover:bg-white/[.05]"><Instagram size={17}/> Instagram</a>
-          <a href={brandConfig.facebookUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 px-5 text-sm font-semibold text-white hover:border-[#8DB8FF] hover:bg-white/[.05]"><Facebook size={17}/> Facebook</a>
-          <a href={buildGeneralWhatsAppLink('Quiero consultar por HANDHELD')} onClick={() => recordInterest('purchase_click',undefined,'whatsapp')} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#3678FF] px-5 text-sm font-bold text-white hover:bg-[#2866E8]"><MessageCircle size={17}/> WhatsApp</a>
+        <div className="flex flex-wrap items-center gap-3">
+          <a href={brandConfig.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Seguir a HANDHELD en Instagram" className="group inline-flex min-h-14 items-center gap-3 rounded-full border border-[#F6A9D9]/70 bg-gradient-to-r from-[#833AB4] via-[#C13584] to-[#E1306C] px-6 text-sm font-black text-white shadow-[0_8px_30px_rgba(193,53,132,.35)] transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_38px_rgba(193,53,132,.55)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F6A9D9]"><Instagram size={23}/><span>SEGUINOS EN INSTAGRAM<span className="block text-xs font-medium normal-case opacity-90">{brandConfig.instagramHandle}</span></span><ArrowUpRight size={18} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/></a>
+          <a href={brandConfig.facebookUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 px-5 text-sm font-semibold text-white transition-colors hover:border-[#8DB8FF] hover:bg-white/[.05]"><Facebook size={17}/> Facebook</a>
         </div>
       </div>
     </div>

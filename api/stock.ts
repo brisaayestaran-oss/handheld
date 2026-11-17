@@ -49,7 +49,7 @@ export async function fetchLiveSheetRows(): Promise<LiveSheetRow[]> {
     const personalLegionForSale = type === 'servicio' &&
       cells[0]?.trim().toLowerCase() === 'legion go' &&
       cells[3]?.trim().toLowerCase() === '512gb z1 extreme + completa (se incluyeron adaptadores)';
-    if (type !== 'handheld' && !personalLegionForSale) return [];
+    if (type !== 'handheld' && type !== 'handheld propia' && !personalLegionForSale) return [];
     const name = cells[0]?.trim() ?? '';
     const model = cells[3]?.trim() ?? '';
     const status = cells[7]?.trim() ?? '';
