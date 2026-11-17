@@ -33,6 +33,10 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
         product.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
 
       return matchBrand && matchQuery;
+    }).sort((a, b) => {
+      const priceA = Math.min(...a.variants.filter(v => v.inStock).map(v => v.priceARSApprox));
+      const priceB = Math.min(...b.variants.filter(v => v.inStock).map(v => v.priceARSApprox));
+      return priceA - priceB || a.name.localeCompare(b.name, 'es');
     });
   }, [products, selectedBrand, searchQuery]);
 
@@ -122,6 +126,7 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
             {filteredProducts.map((product) => {
+              const isLimitedEdition = /edici[oó]n limitada/i.test(product.name);
               const activeVariantIdx = selectedVariantByProduct[product.id] ?? 0;
               const currentVariant = product.variants[activeVariantIdx] || product.variants[0];
               const whatsappUrl = buildWhatsAppLink(product.brand, product.model, currentVariant.capacity);
@@ -130,11 +135,12 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
                 <div
                   key={product.id}
                   onClick={() => onSelectProduct(product, activeVariantIdx)}
-                  className="group relative flex flex-col justify-between overflow-hidden rounded-[1.5rem] border border-[#91B3FF]/[0.13] bg-[linear-gradient(155deg,#142039,#101115_55%)] shadow-[0_12px_34px_rgba(0,0,0,.22)] transition-[border-color,box-shadow] duration-200 hover:border-[#6B96F0]/50 hover:shadow-[0_18px_50px_rgba(0,0,0,.35)] cursor-pointer"
+                  className={`group relative flex flex-col justify-between overflow-hidden rounded-[1.5rem] border bg-[linear-gradient(155deg,#142039,#101115_55%)] shadow-[0_12px_34px_rgba(0,0,0,.22)] transition-[border-color,box-shadow] duration-200 hover:shadow-[0_18px_50px_rgba(0,0,0,.35)] cursor-pointer ${isLimitedEdition ? 'border-[#A4BFFF]/75 ring-1 ring-inset ring-[#88A9EE]/25 shadow-[0_0_32px_rgba(100,146,255,.13)] hover:border-[#D0DFFF]' : 'border-[#91B3FF]/[0.13] hover:border-[#6B96F0]/50'}`}
                 >
                   {/* Card Header & Visual Container */}
                   <div className="p-4 sm:p-5 pb-2">
                     {/* Top unboxed metadata */}
+                    {isLimitedEdition && <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#8DAFF4]/45 bg-[#2B436C]/60 px-3 py-1 text-[10px] font-bold uppercase tracking-[.14em] text-[#DCE9FF]">Edición limitada</div>}
                     <div className="flex items-center justify-between text-xs text-[#C8CAD1]/70 mb-4">
                       <div className="flex items-center gap-2">
                         <span className="font-mono-tech tracking-wider uppercase text-white font-semibold">
