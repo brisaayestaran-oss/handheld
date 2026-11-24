@@ -1,5 +1,6 @@
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
+import LogoLoaderDemo from './components/LogoLoaderDemo.tsx';
 import './index.css';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
@@ -16,4 +17,5 @@ window.addEventListener('pageshow', goToStart);
 window.addEventListener('load', goToStart);
 goToStart();
 
-createRoot(document.getElementById('root')!).render(<><App /><Analytics /><SpeedInsights /></>);
+const isLogoDemo = window.location.pathname.replace(/\/$/, '') === '/demo/logo-loader';
+createRoot(document.getElementById('root')!).render(isLogoDemo ? <LogoLoaderDemo /> : <><App /><Analytics /><SpeedInsights /></>);
