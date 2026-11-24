@@ -64,7 +64,7 @@ function traceExactLogo(image: HTMLImageElement): { paths: Contour[]; viewBox: s
   return { paths: contours, viewBox: `${minX - 18} ${minY - 18} ${maxX - minX + 37} ${maxY - minY + 37}` };
 }
 
-export default function LogoLoaderDemo() {
+export default function LogoLoaderDemo({ embedded = false, onComplete }: { embedded?: boolean; onComplete?: () => void }) {
   const instance = useId().replace(/:/g, '');
   const sectionRef = useRef<HTMLElement>(null);
   const pathRefs = useRef<(SVGPathElement | null)[]>([]);
@@ -75,6 +75,9 @@ export default function LogoLoaderDemo() {
   const pausedRef = useRef(false);
   const reducedRef = useRef(reduced);
   const progressRef = useRef(0);
+  const completeRef = useRef(onComplete);
+  completeRef.current = onComplete;
+  const finishedRef = useRef(false);
   const frameRef = useRef<number | null>(null);
   const [ready, setReady] = useState(false);
   const renderRef = useRef<(ms: number) => void>(() => {});
@@ -87,7 +90,7 @@ export default function LogoLoaderDemo() {
     image.src = '/handheld.png';
     image.decode().then(() => {
       if (!cancelled) { setGeometry(traceExactLogo(image)); setReady(true); }
-    }).catch(() => { if (!cancelled) setFailed(true); });
+    }).catch(() => { if (!cancelled) { setFailed(true); if (completeRef.current) completeRef.current(); } });
     return () => { cancelled = true; };
   }, []);
 
@@ -96,8 +99,10 @@ export default function LogoLoaderDemo() {
     const onChange = () => {
       reducedRef.current = query.matches;
       setReduced(query.matches);
-      if (query.matches) renderRef.current(4000);
-      else renderRef.current(progressRef.current);
+      if (query.matches) {
+        renderRef.current(4000);
+        if (completeRef.current) completeRef.current();
+      } else renderRef.current(progressRef.current);
     };
     query.addEventListener('change', onChange);
     return () => query.removeEventListener('change', onChange);
@@ -143,16 +148,25 @@ export default function LogoLoaderDemo() {
       if (filled) filled.style.opacity = String(fill);
       if (lockup) lockup.style.opacity = String(1 - ease((t - 5000) / 600));
     };
-    if (reducedRef.current) renderRef.current(4000);
-    else renderRef.current(progressRef.current);
+    if (reducedRef.current) {
+      renderRef.current(4000);
+      if (completeRef.current) completeRef.current();
+    } else renderRef.current(progressRef.current);
     let last: number | null = null;
     const tick = (time: number) => {
       if (last === null) last = time;
       const delta = Math.min(time - last, 100);
       last = time;
       if (!reducedRef.current && !pausedRef.current && visibleRef.current && !hiddenRef.current) {
-        progressRef.current = (progressRef.current + delta) % PERIOD;
-        renderRef.current(progressRef.current);
+        const next = progressRef.current + delta;
+        if (next >= PERIOD && completeRef.current && !finishedRef.current) {
+          finishedRef.current = true;
+          renderRef.current(PERIOD - 0.01);
+          completeRef.current();
+        } else {
+          progressRef.current = next % PERIOD;
+          renderRef.current(progressRef.current);
+        }
       }
       frameRef.current = requestAnimationFrame(tick);
     };
@@ -162,9 +176,10 @@ export default function LogoLoaderDemo() {
 
   const toggle = () => { if (reduced) return; pausedRef.current = !pausedRef.current; setPaused(pausedRef.current); };
   const replay = () => { if (reduced) return; progressRef.current = 0; pausedRef.current = false; setPaused(false); renderRef.current(0); };
+  const SectionElement = embedded ? 'section' : 'main';
 
   return (
-    <main ref={sectionRef} className="relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden bg-[#182b35] text-[#faf6f9]" aria-label="Demostración de animación del logo completo de HANDHELD">
+    <SectionElement ref={sectionRef} className={`relative flex w-full items-center justify-center overflow-hidden text-[#faf6f9] ${embedded ? "min-h-[52svh] bg-transparent py-14 sm:min-h-[65svh] sm:py-20" : "min-h-[100svh] bg-[#050A15]"}`} aria-label="Demostración de animación del logo completo de HANDHELD">
       <div className="flex w-[84vw] max-w-[620px] items-center justify-center sm:w-[58vw]">
         {geometry && ready ? (
           <svg role="img" aria-label="HANDHELD, símbolo de consola y nombre completo de la marca" viewBox={geometry.viewBox} className="block h-auto w-full overflow-visible" preserveAspectRatio="xMidYMid meet">
@@ -187,6 +202,6 @@ export default function LogoLoaderDemo() {
         <button type="button" onClick={toggle} disabled={!ready || reduced || failed} className="rounded-md px-3 py-2 text-xs text-[#faf6f9] opacity-70 transition-opacity hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-not-allowed disabled:opacity-30" aria-label={paused ? 'Reproducir animación' : 'Pausar animación'}>{paused ? 'Play' : 'Pause'}</button>
         <button type="button" onClick={replay} disabled={!ready || reduced || failed} className="rounded-md px-3 py-2 text-xs text-[#faf6f9] opacity-70 transition-opacity hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-not-allowed disabled:opacity-30" aria-label="Reiniciar animación">Replay</button>
       </div>
-    </main>
+    </SectionElement>
   );
 }

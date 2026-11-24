@@ -1,4 +1,5 @@
 import {createRoot} from 'react-dom/client';
+import {useEffect, useState} from 'react';
 import App from './App.tsx';
 import LogoLoaderDemo from './components/LogoLoaderDemo.tsx';
 import './index.css';
@@ -17,5 +18,33 @@ window.addEventListener('pageshow', goToStart);
 window.addEventListener('load', goToStart);
 goToStart();
 
+function HandheldSite() {
+  const home = window.location.pathname === '/' || window.location.pathname === '';
+  const admin = window.location.hash === '#admin';
+  const [showIntro, setShowIntro] = useState(home && !admin && !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  useEffect(() => {
+    if (!showIntro) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previous; };
+  }, [showIntro]);
+
+  return (
+    <>
+      <div aria-hidden={showIntro} inert={showIntro} style={showIntro ? { visibility: 'hidden' } : undefined}>
+        <App />
+      </div>
+      {showIntro && (
+        <div className="fixed inset-0 z-[9999] bg-[#050A15]">
+          <LogoLoaderDemo onComplete={() => setShowIntro(false)} />
+        </div>
+      )}
+      <Analytics />
+      <SpeedInsights />
+    </>
+  );
+}
+
 const isLogoDemo = window.location.pathname.replace(/\/$/, '') === '/demo/logo-loader';
-createRoot(document.getElementById('root')!).render(isLogoDemo ? <LogoLoaderDemo /> : <><App /><Analytics /><SpeedInsights /></>);
+createRoot(document.getElementById('root')!).render(isLogoDemo ? <LogoLoaderDemo /> : <HandheldSite />);
