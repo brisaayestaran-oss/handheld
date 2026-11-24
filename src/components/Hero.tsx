@@ -1,49 +1,11 @@
 import React from 'react';
 import { ArrowRight, ChevronDown, MessageCircle } from 'lucide-react';
 import { buildGeneralWhatsAppLink } from '../config/brand';
+import { FloatingSteamDeck } from './FloatingSteamDeck';
 
 export interface HeroProps { onExplore: () => void; }
 
 export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
-  const videoRef = React.useRef<HTMLVideoElement>(null);
-  const [showVideo, setShowVideo] = React.useState(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches && !(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
-  React.useEffect(() => {
-    const syncSize = () => setShowVideo(!window.matchMedia('(prefers-reduced-motion: reduce)').matches && !(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
-    window.addEventListener('resize', syncSize);
-    return () => window.removeEventListener('resize', syncSize);
-  }, []);
-  React.useEffect(() => {
-    const video = videoRef.current;
-    if (!video || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    let inViewport = false;
-    let sourceLoaded = false;
-    const syncPlayback = () => {
-      if (inViewport && !sourceLoaded) {
-        sourceLoaded = true;
-        const source = document.createElement('source');
-        source.src = '/Steam%20deck/overview_oled%20(1).webm';
-        source.type = 'video/webm';
-        video.appendChild(source);
-        video.load();
-      }
-      if (inViewport && document.visibilityState === 'visible') {
-        void video.play().catch(() => {});
-      } else {
-        video.pause();
-      }
-    };
-    const observer = new IntersectionObserver(([entry]) => {
-      inViewport = entry.isIntersecting;
-      syncPlayback();
-    }, { threshold: 0.1 });
-    observer.observe(video);
-    document.addEventListener('visibilitychange', syncPlayback);
-    return () => {
-      observer.disconnect();
-      document.removeEventListener('visibilitychange', syncPlayback);
-      video.pause();
-    };
-  }, [showVideo]);
   return (
   <section id="inicio" className="relative isolate overflow-hidden bg-[#050A15] text-white scroll-mt-20">
     {/* Dos zonas independientes: el movimiento del video nunca invade el texto. */}
@@ -74,30 +36,8 @@ export const Hero: React.FC<HeroProps> = ({ onExplore }) => {
       </div>
     </div>
 
-    {/* Escenario propio, sin marcos ni posibilidad de superponerse al titular. */}
-    <div className="relative isolate mx-auto -mt-1 w-full max-w-[1500px] overflow-hidden px-0 sm:mt-0 sm:px-5" aria-label="Presentación de consola Steam Deck">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-[12%] top-[25%] h-[65%] rounded-full bg-[#13244A]/35 blur-[90px]" />
-      {showVideo ? (
-      <video ref={videoRef} muted loop playsInline preload="none" poster="/Steam%20deck/steam_deck_oled/press_front_home.webp" onError={() => setShowVideo(false)}
-        aria-label="Video de presentación Steam Deck"
-        className="relative z-10 block aspect-[16/9] w-full object-contain"
-        style={{
-          maskImage: "radial-gradient(ellipse 54% 70% at 50% 51%, black 45%, transparent 98%)",
-          WebkitMaskImage: "radial-gradient(ellipse 54% 70% at 50% 51%, black 45%, transparent 98%)",
-          mixBlendMode: 'screen',
-        }}>
-      </video>
-      ) : (
-        <img src="/Steam%20deck/steam_deck_oled/press_front_home.webp" alt="Consola Steam Deck" className="relative z-10 mx-auto aspect-[16/9] max-h-[440px] w-full object-contain" decoding="async" loading="eager" fetchPriority="high" />
-      )}
-      {/* Transición extendida: elimina el corte superior del video sin oscurecer la consola. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[20%] bg-gradient-to-b from-[#050A15]/70 to-transparent sm:h-[43%] sm:from-[#050A15] sm:via-[#050A15]/85" />
-      {/* Fundir el borde inferior del video con el fondo antes del catálogo. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[26%] bg-gradient-to-t from-[#050A15] via-[#050A15]/90 to-transparent" />
-      {/* Disolver ambos bordes laterales en el mismo fondo de la portada. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[9%] bg-gradient-to-r from-[#050A15]/75 to-transparent sm:w-[22%] sm:from-[#050A15] sm:via-[#050A15]/80" />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-20 w-[9%] bg-gradient-to-l from-[#050A15]/75 to-transparent sm:w-[22%] sm:from-[#050A15] sm:via-[#050A15]/80" />
-    </div>
+    {/* Imagen original de Steam Deck con suspensión y parallax sutil. */}
+    <FloatingSteamDeck />
     <div className="relative z-20 -mt-5 flex justify-center px-5 pb-6 sm:-mt-10 sm:pb-8">
       <button type="button" onClick={onExplore}
         className="inline-flex items-center gap-3 rounded-full border border-[#A1B5ED]/35 bg-[#070C18]/85 px-5 py-3 text-[11px] font-bold uppercase tracking-[.13em] text-white transition-colors hover:border-[#91B2FF]">
