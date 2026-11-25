@@ -6,7 +6,7 @@ export const FeatureHighlightsSection: React.FC = () => (
   <section aria-label="Más posibilidades con tu consola" className="relative isolate overflow-hidden">
     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_75%_25%,rgba(40,70,145,.13),transparent_55%)]" aria-hidden="true" />
     <div className="relative mx-auto max-w-[1380px] px-5 sm:px-8 lg:px-12">
-      <div className="grid items-center gap-7 border-t border-white/[.07] py-14 sm:py-20 lg:grid-cols-[1.1fr_.9fr] lg:gap-16 lg:py-24">
+      <div className="grid items-center gap-5 border-t border-white/[.07] py-9 sm:py-20 lg:grid-cols-[1.1fr_.9fr] lg:gap-16 lg:py-24">
         <div className="relative min-w-0 overflow-hidden">
           <div aria-hidden="true" className="pointer-events-none absolute inset-[15%] rounded-full bg-[#3569CC]/15 blur-[90px]"/>
           <img src="/optimized/legion-go-detached.webp" width="1050" height="680" loading="lazy" decoding="async"

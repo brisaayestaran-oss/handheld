@@ -25,6 +25,13 @@ export const ProductDetailModal: React.FC<Props> = ({
   const [selectedGalleryIdx, setSelectedGalleryIdx] = useState<number>(0);
 
   useEffect(() => {
+    if (!product) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [Boolean(product)]);
+
+  useEffect(() => {
     setSelectedVariantIdx(initialVariantIndex);
     setSelectedGalleryIdx(0);
   }, [product?.id, initialVariantIndex]);
@@ -37,7 +44,7 @@ export const ProductDetailModal: React.FC<Props> = ({
   const relatedProducts = allProducts.filter((p) => p.id !== product.id).slice(0, 2);
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-lg flex items-start justify-center p-0 sm:items-center sm:p-5 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto overscroll-contain bg-black/85 backdrop-blur-lg flex items-start justify-center p-0 sm:items-center sm:p-5 animate-in fade-in duration-200">
       <div className="relative my-0 w-full max-w-5xl overflow-hidden border border-white/[0.12] bg-[#101725] shadow-[0_30px_90px_rgba(0,0,0,.85)] sm:my-6 sm:rounded-3xl">
         {/* Top bar with close button */}
         <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-4 bg-[#101115]/90 backdrop-blur-md border-b border-white/[0.08]">
@@ -57,7 +64,7 @@ export const ProductDetailModal: React.FC<Props> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="max-h-[calc(100dvh-60px)] space-y-7 overflow-y-auto p-4 sm:max-h-[85vh] sm:p-7">
+        <div className="max-h-[calc(100dvh-60px)] space-y-7 overflow-y-auto overscroll-contain p-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] sm:max-h-[85vh] sm:p-7">
           {/* Top Section: Visual Gallery & Purchase Module */}
           <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-12 lg:gap-8">
             {/* Visual Viewport & Thumbnails (Left) */}

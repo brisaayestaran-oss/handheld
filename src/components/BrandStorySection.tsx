@@ -4,12 +4,12 @@ import { brandConfig, buildGeneralWhatsAppLink } from '../config/brand';
 import { recordInterest } from '../services/interestAnalytics';
 
 export const BrandStorySection: React.FC = () => (
-  <section id="nosotros" className="relative isolate scroll-mt-20 overflow-hidden px-5 py-20 sm:px-8 sm:py-28">
+  <section id="nosotros" className="relative isolate scroll-mt-20 overflow-hidden px-5 py-12 sm:px-8 sm:py-28">
     <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-0 h-[580px] w-[850px] -translate-x-1/2 rounded-full bg-[#326AC4]/[.13] blur-[150px]" />
-    <div className="relative mx-auto max-w-6xl border-t border-white/10 pt-12 sm:pt-16">
+    <div className="relative mx-auto max-w-6xl border-t border-white/10 pt-8 sm:pt-16">
       <p className="text-xs font-bold uppercase tracking-[.25em] text-[#8EB5FF]">QUIÉNES SOMOS / HANDHELD ARGENTINA</p>
-      <h2 className="mt-7 max-w-5xl font-display text-[clamp(2.5rem,7vw,7.3rem)] font-black uppercase leading-[.97] tracking-tight text-white">Desde Argentina,<span className="block text-[#8BB5FF]">para todos los argentinos.</span></h2>
-      <div className="mt-9 grid items-start gap-8 sm:mt-12 lg:grid-cols-[1fr_.8fr] lg:gap-20">
+      <h2 className="mt-4 sm:mt-7 max-w-5xl font-display text-[clamp(2.5rem,7vw,7.3rem)] font-black uppercase leading-[.97] tracking-tight text-white">Desde Argentina,<span className="block text-[#8BB5FF]">para todos los argentinos.</span></h2>
+      <div className="mt-6 grid items-start gap-6 sm:mt-12 lg:grid-cols-[1fr_.8fr] lg:gap-20">
         <div>
           <p className="max-w-2xl text-lg leading-relaxed text-[#D7E2F4] sm:text-2xl">Nos apasiona el gaming portátil y queremos acercarte una forma distinta de jugar.</p>
           <p className="mt-5 max-w-xl text-sm leading-relaxed text-[#B3C4DE] sm:text-base">HANDHELD es un emprendimiento argentino. Escuchamos qué jugás, qué buscás y cuál es tu presupuesto para ayudarte a elegir tu próxima consola. Sin discursos complicados: una charla de persona a persona.</p>
@@ -25,7 +25,7 @@ export const BrandStorySection: React.FC = () => (
 );
 
 export const FollowUsSection: React.FC = () => (
-  <section id="seguinos" aria-label="Seguinos en redes sociales" className="relative scroll-mt-20 px-5 py-10 sm:px-8 sm:py-14">
+  <section id="seguinos" aria-label="Seguinos en redes sociales" className="relative scroll-mt-20 px-5 py-7 sm:px-8 sm:py-14">
     <div className="mx-auto max-w-6xl rounded-2xl border border-[#7AA5F1]/20 bg-[#111C32]/75 px-5 py-6 sm:px-8 sm:py-8">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div>

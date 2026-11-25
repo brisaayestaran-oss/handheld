@@ -18,10 +18,18 @@ window.addEventListener('pageshow', goToStart);
 window.addEventListener('load', goToStart);
 goToStart();
 
+function introNotSeenInSession() {
+  try { return sessionStorage.getItem('handheld-intro-seen-v1') !== 'yes'; } catch { return true; }
+}
+
 function HandheldSite() {
   const home = window.location.pathname === '/' || window.location.pathname === '';
   const admin = window.location.hash === '#admin';
-  const [showIntro, setShowIntro] = useState(home && !admin && !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [showIntro, setShowIntro] = useState(home && !admin && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && introNotSeenInSession());
+  const completeIntro = () => {
+    try { sessionStorage.setItem('handheld-intro-seen-v1', 'yes'); } catch { /* almacenamiento opcional */ }
+    setShowIntro(false);
+  };
 
   useEffect(() => {
     if (!showIntro) return;
@@ -37,7 +45,7 @@ function HandheldSite() {
       </div>
       {showIntro && (
         <div className="fixed inset-0 z-[9999] bg-[#050A15]">
-          <LogoLoaderDemo onComplete={() => setShowIntro(false)} />
+          <LogoLoaderDemo onComplete={completeIntro} />
         </div>
       )}
       <Analytics />

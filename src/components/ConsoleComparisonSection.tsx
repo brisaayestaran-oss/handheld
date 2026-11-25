@@ -23,7 +23,7 @@ export const ConsoleComparisonSection: React.FC<Props> = ({
   const seeCatalog = () => document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' });
 
   return (
-    <section id="experiencia" className="relative scroll-mt-24 bg-transparent px-5 py-12 sm:px-8 sm:py-20">
+    <section id="experiencia" className="relative scroll-mt-20 bg-transparent px-5 py-8 sm:scroll-mt-24 sm:px-8 sm:py-20">
       <div className="mx-auto max-w-7xl">
         <p className="text-xs font-bold uppercase tracking-[.22em] text-[#8FA9FF]">COMPARÁ EN UN VISTAZO</p>
         <h2 className="mt-3 text-2xl font-black uppercase text-white sm:text-4xl">¿CUÁL VA CON VOS?</h2>

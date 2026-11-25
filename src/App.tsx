@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { PRODUCTS } from './data/products';
 import { STOCK_CATALOG } from './data/stockCatalog';
 import { fetchCatalogFromSheet, fetchCatalogPhotos } from './data/liveCatalog';
@@ -32,6 +32,7 @@ export default function App() {
   const [soldCount, setSoldCount] = useState(0);
   const [stockWarning, setStockWarning] = useState('');
   const [stockLoading, setStockLoading] = useState(true);
+  const [catalogBrand, setCatalogBrand] = useState<'Todas' | 'Valve' | 'Lenovo'>('Todas');
 
   useEffect(() => {
     let active = true;
@@ -72,6 +73,8 @@ export default function App() {
     return () => { active = false; window.clearInterval(interval); document.removeEventListener('visibilitychange', onVisibility); };
   }, []);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const productOpenScrollY = useRef(0);
+  const productOpenFocus = useRef<HTMLElement | null>(null);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState<number>(0);
 
   // La ficha abierta sigue la actualización real del inventario; si se agota,
@@ -144,6 +147,10 @@ export default function App() {
   const legionGo = products.find((p) => p.brand === 'Lenovo') || PRODUCTS.find((p) => p.id === 'lenovo-legion-go')!;
 
   const handleOpenProduct = (product: Product, variantIndex: number = 0) => {
+    if (!selectedProduct) {
+      productOpenScrollY.current = window.scrollY;
+      productOpenFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    }
     recordInterest('product_view', { id: product.variants[variantIndex]?.sku || product.id, name: product.name, capacity: product.variants[variantIndex]?.capacity });
     setSelectedProduct(product);
     setSelectedVariantIndex(variantIndex);
@@ -151,9 +158,15 @@ export default function App() {
 
   const handleCloseProduct = () => {
     setSelectedProduct(null);
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: productOpenScrollY.current, behavior: 'instant' });
+      if (productOpenFocus.current?.isConnected) productOpenFocus.current.focus({ preventScroll: true });
+      productOpenFocus.current = null;
+    });
   };
 
-  const scrollToCatalog = () => {
+  const scrollToCatalog = (brand?: 'Valve' | 'Lenovo') => {
+    setCatalogBrand(brand ?? 'Todas');
     const el = document.getElementById('catalogo');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
@@ -178,28 +191,23 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050A15] [background-image:radial-gradient(ellipse_65%_18%_at_82%_17%,rgba(45,83,174,0.11),transparent),radial-gradient(ellipse_72%_20%_at_15%_60%,rgba(46,88,174,0.08),transparent)] text-white selection:bg-[#3678FF]/30 selection:text-white flex flex-col justify-between">
+    <div className="min-h-screen bg-[#050A15] text-white selection:bg-[#3678FF]/30 selection:text-white flex flex-col justify-between">
       {/* Top Floating Navigation */}
       <Navbar
-        onOpenCatalog={scrollToCatalog}
+        onOpenCatalog={() => scrollToCatalog()}
         onOpenAdmin={() => { window.location.hash = 'admin'; setViewMode('admin'); setShowAuthModal(true); }}
       />
 
       {/* Main Content Sections */}
       {stockWarning && <div role="status" className="relative z-40 mt-24 px-5 text-center text-xs text-amber-200">{stockWarning}</div>}
-      <main className="relative flex-1 bg-transparent">
-        {/* Luces compartidas por TODA la página: atraviesan los limites entre secciones sin cortes. */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -left-[18%] top-[17%] h-[1100px] w-[90%] rounded-full bg-[#254B9B]/[0.075] blur-[180px]" />
-          <div className="absolute -right-[20%] top-[38%] h-[1250px] w-[95%] rounded-full bg-[#47318E]/[0.09] blur-[190px]" />
-          <div className="absolute -left-[22%] top-[65%] h-[1300px] w-[95%] rounded-full bg-[#2457AB]/[0.075] blur-[200px]" />
-          <div className="absolute -right-[18%] top-[87%] h-[1000px] w-[85%] rounded-full bg-[#284A9B]/[0.07] blur-[190px]" />
-        </div>
+      <main className="relative flex-1 bg-[radial-gradient(ellipse_95%_1050px_at_52%_360px,rgba(45,76,157,.15),transparent_85%),radial-gradient(ellipse_85%_1100px_at_15%_45%,rgba(45,49,113,.10),transparent_90%),radial-gradient(ellipse_85%_1200px_at_86%_82%,rgba(33,66,125,.09),transparent_90%)]">
         {/* Section 1: Hero Inmersivo with Protagonist Video */}
         <Hero onExplore={scrollToCatalog} />
 
         {/* El catálogo es lo primero que aparece después de la portada. */}
         <CatalogSection
+          selectedBrand={catalogBrand}
+          onBrandChange={setCatalogBrand}
           loading={stockLoading}
           loadError={stockWarning}
           products={products}
@@ -255,7 +263,7 @@ export default function App() {
       /></Suspense>}
 
       {/* Floating WhatsApp Quick Action Button */}
-      <FloatingWhatsApp />
+      <FloatingWhatsApp modalOpen={Boolean(selectedProduct)} />
     </div>
   );
 }

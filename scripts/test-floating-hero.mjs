@@ -12,11 +12,11 @@ try {
     const errors=[];page.on('pageerror',e=>errors.push(e.message));
     await page.goto('http://127.0.0.1:3100/',{waitUntil:'domcontentloaded'});
     await page.locator('#inicio').waitFor({state:'visible',timeout:15000});
-    const image=page.getByRole('img',{name:/Steam Deck OLED en vista frontal/});
+    const image=page.getByRole('img',{name:/Steam Deck en perspectiva/});
     await image.waitFor({state:'visible',timeout:20000});
-    await page.waitForFunction(()=>{const i=document.querySelector('img[alt^="Steam Deck OLED"]'); return i instanceof HTMLImageElement && i.complete && i.naturalWidth>0;},null,{timeout:15000});
+    await page.waitForFunction(()=>{const i=document.querySelector('img[alt^="Steam Deck en perspectiva"]'); return i instanceof HTMLImageElement && i.complete && i.naturalWidth>0;},null,{timeout:15000});
     const before=await page.evaluate(()=>{
-      const img=document.querySelector('img[alt^="Steam Deck OLED"]');
+      const img=document.querySelector('img[alt^="Steam Deck en perspectiva"]');
       const node=img?.parentElement;
       return {scrollWidth:document.documentElement.scrollWidth, viewport:innerWidth, imageWidth:img?.naturalWidth,bob:node?.style.transform, imageBounds:img?.getBoundingClientRect().toJSON(), hero:!!document.querySelector('#inicio'),catalog:!!document.querySelector('#catalogo')};
     });
@@ -30,7 +30,7 @@ try {
       const rect=await region.boundingBox(); assert(rect);
       await page.mouse.move(rect.x+rect.width*0.8,rect.y+rect.height*0.45);
       await page.waitForTimeout(600);
-      const tilt=await region.locator('div').first().evaluate(el=>el.style.transform);
+      const tilt=await region.locator('div[style*="transform-origin"]').first().evaluate(el=>el.style.transform);
       assert(tilt.includes('rotateX(') && !tilt.includes('rotateX(0deg) rotateY(0deg) rotateZ(0deg)'), tilt);
       console.log('TILT',tilt);
     }
@@ -49,7 +49,7 @@ try {
   }
   const reduced=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
   await reduced.goto('http://127.0.0.1:3100/',{waitUntil:'domcontentloaded'});
-  const image=reduced.getByRole('img',{name:/Steam Deck OLED en vista frontal/});
+  const image=reduced.getByRole('img',{name:/Steam Deck en perspectiva/});
   await image.waitFor({state:'visible',timeout:15000});
   assert(await reduced.getByRole('button',{name:'Pausar movimiento de la consola'}).isDisabled());
   const start=await image.evaluate(el=>el.parentElement?.style.transform);

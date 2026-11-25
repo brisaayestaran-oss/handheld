@@ -12,10 +12,11 @@ interface Props {
   products: Product[];
   fetchedAt?: string;
   onSelectProduct: (product: Product, variantIndex?: number) => void;
+  selectedBrand: 'Todas' | 'Valve' | 'Lenovo';
+  onBrandChange: (brand: 'Todas' | 'Valve' | 'Lenovo') => void;
 }
 
-export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSelectProduct, loading = false, loadError = '' }) => {
-  const [selectedBrand, setSelectedBrand] = useState<string>('Todas');
+export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSelectProduct, selectedBrand, onBrandChange, loading = false, loadError = '' }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedVariantByProduct, setSelectedVariantByProduct] = useState<Record<string, number>>({});
 
@@ -49,13 +50,10 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
   };
 
   return (
-    <section id="catalogo" className="relative scroll-mt-20 py-8 sm:py-12 bg-transparent">
-      {/* Soft background glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-radial from-[#3678FF]/5 to-transparent blur-3xl pointer-events-none" />
-
+    <section id="catalogo" className="relative scroll-mt-16 py-6 sm:scroll-mt-20 sm:py-12 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6 mb-6 sm:mb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-2 sm:gap-6 mb-4 sm:mb-8">
           <div>
             <span className="text-xs font-mono-tech text-[#3678FF] uppercase tracking-widest block mb-2">
               CONSOLAS PORTÁTILES · CAJA ABIERTA Y USADAS
@@ -63,7 +61,7 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
             <h2 className="text-3xl sm:text-5xl font-black font-display text-white tracking-tight uppercase">
               ELEGÍ TU CONSOLA
             </h2>
-            <p className="mt-3 text-sm text-[#AFC0DC]">{loading ? 'Actualizando disponibilidad…' : `${products.length} ${products.length === 1 ? 'consola disponible' : 'consolas disponibles'} para consultar`}</p>
+            <p className="mt-2 text-sm text-[#AFC0DC] sm:mt-3">{loading ? 'Actualizando disponibilidad…' : `${products.length} ${products.length === 1 ? 'consola disponible' : 'consolas disponibles'} para consultar`}</p>
             {fetchedAt && !loading && <p className="mt-1 text-[11px] text-[#849BBF]">Última consulta de stock: {new Date(fetchedAt).toLocaleString('es-AR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}{loadError ? ' · actualización pendiente' : ''}</p>}
 
           </div>
@@ -73,14 +71,27 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
           </div>
         </div>
 
-        {/* Filter & Search Bar */}
-        <div className="p-3 sm:p-4 rounded-2xl bg-[#101115] border border-white/[0.08] mb-6 sm:mb-8 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+        {/* Filtros siempre al alcance dentro del catálogo, sin ocupar toda la pantalla. */}
+        <nav aria-label="Filtrar consolas por marca" className="sticky top-[55px] z-30 -mx-4 mb-3 bg-[#050A15]/90 px-4 py-2 backdrop-blur-xl sm:hidden">
+          <div className="flex w-full items-center justify-between gap-2">
+            {brands.map((brand) => (
+              <button key={brand} type="button"
+                aria-pressed={selectedBrand === brand}
+                onClick={() => onBrandChange(brand as 'Todas' | 'Valve' | 'Lenovo')}
+                className={`min-h-10 flex-1 rounded-lg px-2 text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#87AAFF] ${selectedBrand === brand ? 'bg-[#3678FF] text-white' : 'bg-[#111B2D] text-[#C8D8F1]'}`}>
+                {brand === 'Todas' ? 'Todas' : brand}
+              </button>
+            ))}
+          </div>
+        </nav>
+        {/* Búsqueda, con los filtros de escritorio en su posición original. */}
+        <div className="p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-[#101115] border border-white/[0.08] mb-4 sm:mb-8 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
           {/* Brand Tabs (Segmented interactive buttons) */}
-          <div className="flex items-center gap-1.5 p-1 bg-[#050507] rounded-xl border border-white/[0.06] overflow-x-auto">
+          <div className="hidden sm:flex items-center gap-1.5 p-1 bg-[#050507] rounded-xl border border-white/[0.06] overflow-x-auto">
             {brands.map((brand) => (
               <button
                 key={brand}
-                onClick={() => setSelectedBrand(brand)}
+                onClick={() => onBrandChange(brand as 'Todas' | 'Valve' | 'Lenovo')}
                 className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all whitespace-nowrap ${
                   selectedBrand === brand
                     ? 'bg-[#20232B] text-white shadow-sm border border-white/[0.12]'
@@ -115,7 +126,7 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
             <p className="mt-1 text-xs text-[#C8CAD1]/60">{loading ? 'Estamos consultando el inventario actualizado.' : loadError ? 'La conexión con el inventario falló. Podés consultar por WhatsApp.' : products.length === 0 ? 'Consultá por WhatsApp para conocer próximas unidades.' : 'Probá restablecer la búsqueda o consultar directamente por WhatsApp.'}</p>
             {!loading && !loadError && products.length > 0 && <button
               onClick={() => {
-                setSelectedBrand('Todas');
+                onBrandChange('Todas');
                 setSearchQuery('');
               }}
               className="mt-6 px-5 py-2.5 text-xs font-bold text-white bg-[#20232B] hover:bg-white/10 rounded-xl transition-colors border border-white/10"
@@ -135,13 +146,13 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
                 <div
                   key={product.id}
                   onClick={() => onSelectProduct(product, activeVariantIdx)}
-                  className={`group relative flex flex-col justify-between overflow-hidden rounded-[1.5rem] border bg-[linear-gradient(155deg,#142039,#101115_55%)] shadow-[0_12px_34px_rgba(0,0,0,.22)] transition-[border-color,box-shadow] duration-200 hover:shadow-[0_18px_50px_rgba(0,0,0,.35)] cursor-pointer ${isLimitedEdition ? 'border-[#A4BFFF]/75 ring-1 ring-inset ring-[#88A9EE]/25 shadow-[0_0_32px_rgba(100,146,255,.13)] hover:border-[#D0DFFF]' : 'border-[#91B3FF]/[0.13] hover:border-[#6B96F0]/50'}`}
+                  className={`group relative grid grid-cols-[112px_minmax(0,1fr)] sm:flex sm:flex-col justify-between overflow-hidden rounded-xl sm:rounded-[1.5rem] border bg-[linear-gradient(155deg,#142039,#101115_55%)] shadow-[0_12px_34px_rgba(0,0,0,.22)] transition-[border-color,box-shadow] duration-200 hover:shadow-[0_18px_50px_rgba(0,0,0,.35)] cursor-pointer ${isLimitedEdition ? 'border-[#A4BFFF]/75 ring-1 ring-inset ring-[#88A9EE]/25 shadow-[0_0_32px_rgba(100,146,255,.13)] hover:border-[#D0DFFF]' : 'border-[#91B3FF]/[0.13] hover:border-[#6B96F0]/50'}`}
                 >
                   {/* Card Header & Visual Container */}
-                  <div className="p-4 sm:p-5 pb-2">
+                  <div className="min-w-0 p-2 sm:p-5 pb-1 sm:pb-2">
                     {/* Top unboxed metadata */}
                     {isLimitedEdition && <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#8DAFF4]/45 bg-[#2B436C]/60 px-3 py-1 text-[10px] font-bold uppercase tracking-[.14em] text-[#DCE9FF]">Edición limitada</div>}
-                    <div className="flex items-center justify-between text-xs text-[#C8CAD1]/70 mb-4">
+                    <div className="hidden sm:flex items-center justify-between text-xs text-[#C8CAD1]/70 mb-4">
                       <div className="flex items-center gap-2">
                         <span className="font-mono-tech tracking-wider uppercase text-white font-semibold">
                           {product.brand}
@@ -152,7 +163,7 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
                     </div>
 
                     {/* Real Console Photography Display */}
-                    <div className="flex min-h-[205px] items-center justify-center rounded-2xl bg-[radial-gradient(ellipse_at_center,rgba(56,106,209,.16),transparent_70%)] px-3 py-5 sm:min-h-[220px]">
+                    <div className="flex h-[122px] sm:h-auto sm:min-h-[220px] items-center justify-center rounded-lg sm:rounded-2xl bg-[radial-gradient(ellipse_at_center,rgba(56,106,209,.16),transparent_70%)] px-1 py-2 sm:px-3 sm:py-5">
                       <img
                         src={
                           product.realPhotos?.[0] || product.coverImage || (product.brand === 'Lenovo'
@@ -160,26 +171,32 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
                             : !/oled/i.test(product.model) ? '/Steam%20deck/steamdeck_renderings/rendering07.webp' : '/Steam%20deck/steam_deck_oled/press_front_home.webp')
                         }
                         alt={`${product.name} · ${product.realPhotos?.length ? 'foto real de la unidad' : 'imagen ilustrativa del modelo'}`}
-                        className="max-h-[205px] w-full object-contain drop-shadow-[0_16px_28px_rgba(0,0,0,.55)] transition-transform duration-300 group-hover:scale-[1.025]"
+                        className="max-h-[112px] sm:max-h-[205px] w-full scale-[1.12] sm:scale-100 object-contain drop-shadow-[0_16px_28px_rgba(0,0,0,.55)] transition-transform duration-300 group-hover:scale-[1.025]"
                         loading="lazy" decoding="async" width="400" height="220" referrerPolicy="no-referrer"
                       />
                     </div>
                   </div>
 
                   {/* Card Content & Variant Selector */}
-                  <div className="p-4 sm:p-5 pt-0 flex-1 flex flex-col justify-between">
+                  <div className="min-w-0 p-3 sm:p-5 sm:pt-0 flex-1 flex flex-col justify-between">
                     <div>
-                      <h3 className="text-xl font-black font-display text-white group-hover:text-[#3678FF] transition-colors">
+                      <h3 className="text-base sm:text-xl font-black font-display text-white group-hover:text-[#3678FF] transition-colors">
                         {product.name}
                       </h3>
+                      <p className="mt-1 text-[10px] font-medium text-emerald-300 sm:hidden">En stock · {product.condition}</p>
                       {!product.packageDetails && <p className="mt-2 text-xs leading-relaxed text-[#B8C6DE] line-clamp-2">{product.model}</p>}
-                      {product.packageDetails && <p className="mt-3 rounded-xl border border-white/10 bg-white/[.035] px-3 py-2 text-xs leading-relaxed text-[#D1DEEF]"><span className="font-bold text-white">Presentación / accesorios: </span>{product.packageDetails}</p>}
-                      {product.fullDescription && product.fullDescription !== product.model && <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[#9EAFCA]">{product.fullDescription}</p>}
+                      {product.packageDetails && <p className="mt-1.5 sm:mt-3 text-[11px] leading-snug line-clamp-2 sm:line-clamp-none sm:rounded-xl sm:border sm:border-white/10 sm:bg-white/[.035] sm:px-3 sm:py-2 sm:text-xs sm:leading-relaxed text-[#D1DEEF]"><span className="font-bold text-white">Presentación / accesorios: </span>{product.packageDetails}</p>}
+                      {product.fullDescription && product.fullDescription !== product.model && <p className="mt-2 hidden sm:line-clamp-2 text-xs leading-relaxed text-[#9EAFCA]">{product.fullDescription}</p>}
 
-                      {!product.realPhotos?.length && <p className="mt-2 text-[11px] text-[#9DB4D5]">Imagen ilustrativa · Solicitá fotos de esta unidad.</p>}
+                      {!product.realPhotos?.length && <p className="mt-2 hidden sm:block text-[11px] text-[#9DB4D5]">Imagen ilustrativa · Solicitá fotos de esta unidad.</p>}
+                      <div className="mt-3 hidden sm:flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-[#AFC4E2]">
+                        <span>{product.realPhotos?.length ? `${product.realPhotos.length} foto${product.realPhotos.length === 1 ? '' : 's'} real${product.realPhotos.length === 1 ? '' : 'es'} de esta unidad` : 'Fotos reales a solicitar'}</span>
+                        <span aria-hidden="true">·</span>
+                        <span>Entrega a coordinar por WhatsApp</span>
+                      </div>
                       {/* Storage Variants selector (Clickable buttons) */}
                       {product.variants.length > 1 && (
-                        <div className="mt-4 pt-4 border-t border-white/[0.06]">
+                        <div className="mt-2 sm:mt-4 pt-2 sm:pt-4 border-t border-white/[0.06]">
                           <span className="text-sm font-semibold text-white uppercase tracking-wider block mb-3">
                             Almacenamiento:
                           </span>
@@ -203,12 +220,12 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
                     </div>
 
                     {/* Pricing & Footer Actions */}
-                    <div className="mt-4 pt-4 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-3">
+                    <div className="mt-3 sm:mt-4 pt-2 sm:pt-4 border-t border-white/[0.06] flex flex-wrap items-center justify-between gap-2 sm:gap-3">
                       <div>
-                        <div className="text-[10px] font-mono-tech text-[#C8CAD1]/50 uppercase tracking-wider">
+                        <div className="text-[9px] sm:text-[10px] font-mono-tech text-[#C8CAD1]/50 uppercase tracking-wider">
                           Precio directo · sin envío
                         </div>
-                        <div className="whitespace-nowrap text-[clamp(1.15rem,4.4vw,1.5rem)] font-black font-display text-white tabular-nums tracking-tight">
+                        <div className="whitespace-nowrap text-base sm:text-[clamp(1.15rem,4.4vw,1.5rem)] font-black font-display text-white tabular-nums tracking-tight">
                           $ {Number(currentVariant.priceARSApprox).toLocaleString('es-AR', { maximumFractionDigits: 0 })}
                         </div>
                       </div>
@@ -221,7 +238,7 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
                           rel="noopener noreferrer"
                           onClick={(e) => { e.stopPropagation(); recordInterest('purchase_click', { id: currentVariant.sku, name: product.name, capacity: currentVariant.capacity }, 'whatsapp'); }}
                           title="Consultar disponibilidad por WhatsApp" aria-label={`Consultar por WhatsApp sobre ${product.name}, ${currentVariant.capacity}`}
-                          className="min-h-11 min-w-11 flex items-center justify-center rounded-xl bg-white/[0.04] hover:bg-[#3678FF] hover:text-white text-[#3678FF] border border-white/[0.08] transition-colors"
+                          className="hidden sm:flex min-h-11 min-w-11 items-center justify-center rounded-xl bg-white/[0.04] hover:bg-[#3678FF] hover:text-white text-[#3678FF] border border-white/[0.08] transition-colors"
                         >
                           <MessageCircle className="w-4 h-4" />
                         </a>
@@ -229,7 +246,7 @@ export const CatalogSection: React.FC<Props> = ({ products, fetchedAt = '', onSe
                         {/* View console CTA */}
                         <button
                           onClick={() => onSelectProduct(product, activeVariantIdx)}
-                          className="min-h-11 px-4 py-2.5 text-xs font-bold font-display uppercase tracking-wider text-white bg-[#3678FF] hover:bg-[#2563EB] rounded-xl transition-all flex items-center gap-1.5 shrink-0"
+                          className="min-h-10 sm:min-h-11 px-3 sm:px-4 py-2 text-[10px] sm:text-xs font-bold font-display uppercase tracking-wider text-white bg-[#3678FF] hover:bg-[#2563EB] rounded-xl transition-all flex items-center gap-1.5 shrink-0"
                         >
                           <span>VER CONSOLA</span>
                           <ArrowUpRight className="w-3.5 h-3.5" />

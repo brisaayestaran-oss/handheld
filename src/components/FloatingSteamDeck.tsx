@@ -1,6 +1,6 @@
 import React from 'react';
 
-const IMAGE = '/Steam%20deck/steam_deck_oled/press_front_home.png';
+const IMAGE = '/Steam%20deck/deck_angled.png';
 const cycle = 7;
 const easing = (v: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, v)), 2);
 
@@ -125,13 +125,19 @@ export function FloatingSteamDeck() {
   return (
     <div className="relative isolate mx-auto w-full max-w-[1500px] overflow-hidden px-2 sm:px-5" aria-label="Consola Steam Deck flotando suavemente">
       <div ref={section} onPointerMove={pointerMove} onPointerLeave={pointerLeave}
-        className="relative mx-auto h-[235px] w-full max-w-[1160px] touch-pan-y sm:h-[340px] lg:h-[455px]"
+        className="relative mx-auto h-[270px] w-full max-w-[1160px] touch-pan-y sm:h-[380px] lg:h-[490px]"
         style={{ perspective: '1000px' }}>
-        <div ref={tilt} className="absolute inset-[21%_14%_11%] flex items-center justify-center"
+        {/* Iluminación ambiental de estudio, sin marcos ni anillos decorativos. */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute left-1/2 top-[51%] h-[77%] w-[94%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(51,93,233,.32)_0%,rgba(87,41,167,.17)_36%,transparent_74%)] blur-[30px] sm:blur-[52px]" />
+          <div className="absolute bottom-[13%] left-1/2 h-[6%] w-[58%] -translate-x-1/2 rounded-[50%] bg-[#4677FF]/25 blur-[23px]" />
+          <div className="absolute inset-x-[20%] bottom-[4%] h-[1px] bg-gradient-to-r from-transparent via-[#5678FF]/20 to-transparent" />
+        </div>
+        <div ref={tilt} className="absolute inset-[9%_1%_9%] flex items-center justify-center sm:inset-[12%_4%_10%]"
           style={{ transformOrigin: 'center', willChange: reduced ? 'auto' : 'transform' }}>
           <div ref={bob} className="flex h-full w-full items-center justify-center"
             style={{ willChange: reduced ? 'auto' : 'transform' }}>
-            <img src={IMAGE} alt="Steam Deck OLED en vista frontal, consola portátil de Valve"
+            <img src={IMAGE} alt="Steam Deck en perspectiva, consola portátil de Valve"
               className="h-full w-full object-contain drop-shadow-[0_30px_32px_rgba(15,25,55,0.48)]"
               decoding="async" loading="eager" fetchPriority="high" />
           </div>

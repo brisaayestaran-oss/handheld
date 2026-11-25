@@ -36,8 +36,8 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-[#050507]/95 backdrop-blur-xl border-b border-white/[0.08] py-2 shadow-[0_8px_24px_rgba(0,0,0,0.45)]'
-            : 'bg-gradient-to-b from-[#050507]/95 via-[#050507]/75 to-transparent py-3 sm:py-4'
+            ? 'bg-[#050507]/95 backdrop-blur-xl border-b border-white/[0.08] py-1.5 sm:py-2 shadow-[0_8px_24px_rgba(0,0,0,0.45)]'
+            : 'bg-gradient-to-b from-[#050507]/95 via-[#050507]/75 to-transparent py-2.5 sm:py-4'
         }`}
       >
         {/* Subtle top ambient hairline sheen */}
@@ -61,7 +61,7 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
             className="group flex items-center shrink-0 focus:outline-none"
             aria-label="Handheld Inicio"
           >
-            <HandheldLogo size="md" showWordmark={true} withGlow={true} />
+            <img src="/logos/handheld-h.png" alt="HANDHELD" className={`${scrolled ? "h-7" : "h-8"} w-auto object-contain transition-[height,transform] duration-300 group-hover:scale-[1.03] sm:h-10 md:h-11`} loading="eager" />
           </a>
 
           {/* Zone 2: Editorial Navigation Links */}
@@ -87,7 +87,7 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
               onClick={() => recordInterest('purchase_click',undefined,'whatsapp')}
               target="_blank"
               rel="noopener noreferrer"
-              className="relative inline-flex items-center gap-2.5 px-4 sm:px-5 py-2.5 text-xs font-bold font-display uppercase tracking-wider text-white bg-gradient-to-r from-[#101218] via-[#141824] to-[#101218] hover:from-[#151A28] hover:to-[#182038] border border-[#3678FF]/50 hover:border-[#3678FF] rounded-xl transition-all shadow-[0_0_25px_rgba(54,120,255,0.25)] hover:shadow-[0_0_35px_rgba(54,120,255,0.45)] whitespace-nowrap shrink-0 group active:scale-95 overflow-hidden"
+              className="relative inline-flex items-center gap-2.5 px-3 sm:px-5 py-2 text-xs font-bold font-display uppercase tracking-wider text-white bg-gradient-to-r from-[#101218] via-[#141824] to-[#101218] hover:from-[#151A28] hover:to-[#182038] border border-[#3678FF]/50 hover:border-[#3678FF] rounded-xl transition-all shadow-[0_0_25px_rgba(54,120,255,0.25)] hover:shadow-[0_0_35px_rgba(54,120,255,0.45)] whitespace-nowrap shrink-0 group active:scale-95 overflow-hidden"
             >
               {/* Button inner sheen animation */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 pointer-events-none" />
@@ -100,7 +100,7 @@ export const Navbar: React.FC<Props> = ({ onOpenCatalog, onOpenAdmin }) => {
             {/* Mobile Hamburger toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors focus:outline-none"
+              className="lg:hidden p-1.5 text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-colors focus:outline-none"
               aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
